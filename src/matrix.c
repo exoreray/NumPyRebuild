@@ -255,7 +255,7 @@ struct matrix* helper(matrix *mat, int pow){
     if (pow == 1){
         return mat;
     }
-    struct matrix** temp;
+    struct matrix** temp = NULL;
     allocate_matrix(temp, mat->rows, mat->cols);
     struct matrix* preTemp;
     preTemp = helper(mat, pow-1);
