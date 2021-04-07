@@ -260,7 +260,6 @@ struct matrix* helper(matrix *mat, int pow){
     struct matrix* preTemp;
     preTemp = helper(mat, pow-1);
     mul_matrix(temp, mat, preTemp);
-//    printf("%f", get(temp, 0, 0));
     if (pow > 2){
         deallocate_matrix(preTemp);
     }
@@ -273,10 +272,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         return -1;
     }
     result->data = helper(mat, pow)->data;
-    printf("final: %f", get(result, 0, 0));
-    printf("final: %f", get(result, 0, 1));
-    printf("final: %f", get(result, 1, 0));
-    printf("final: %f", get(result, 1, 1));
     return 0;
 }
 

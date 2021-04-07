@@ -138,25 +138,16 @@ void pow_test(void) {
   set(mat, 1, 1, 0);
   pow_matrix(result, mat, 3);
   CU_ASSERT_EQUAL(get(result, 0, 0), 3);
-  printf("%f", get(result, 0, 0));
   CU_ASSERT_EQUAL(get(result, 0, 1), 2);
-    printf("%f", get(result, 0, 1));
-    CU_ASSERT_EQUAL(get(result, 1, 0), 2);
-    printf("%f", get(result, 1, 0));
-    CU_ASSERT_EQUAL(get(result, 1, 1), 1);
-    printf("%f", get(result, 1, 1));
+  CU_ASSERT_EQUAL(get(result, 1, 0), 2);
+  CU_ASSERT_EQUAL(get(result, 1, 1), 1);
 
-    pow_matrix(result, mat, 10);
   CU_ASSERT_EQUAL(get(result, 0, 0), 89);
-    printf("%f", get(result, 0, 0));
-    CU_ASSERT_EQUAL(get(result, 0, 1), 55);
-    printf("%f", get(result, 0, 1));
-    CU_ASSERT_EQUAL(get(result, 1, 0), 55);
-    printf("%f", get(result, 1, 0));
-    CU_ASSERT_EQUAL(get(result, 1, 1), 34);
-    printf("%f", get(result, 1, 1));
+  CU_ASSERT_EQUAL(get(result, 0, 1), 55);
+  CU_ASSERT_EQUAL(get(result, 1, 0), 55);
+  CU_ASSERT_EQUAL(get(result, 1, 1), 34);
 
-    deallocate_matrix(result);
+  deallocate_matrix(result);
   deallocate_matrix(mat);
 }
 
