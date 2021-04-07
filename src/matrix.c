@@ -274,6 +274,9 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     }
     result = helper(mat, pow);
     printf("final: %f", get(result, 0, 0));
+    printf("final: %f", get(result, 0, 1));
+    printf("final: %f", get(result, 1, 0));
+    printf("final: %f", get(result, 1, 1));
     return 0;
 }
 
