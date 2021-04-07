@@ -55,6 +55,22 @@ void rand_matrix(matrix *result, unsigned int seed, double low, double high) {
  */
 int allocate_matrix(matrix **mat, int rows, int cols) {
     /* TODO: YOUR CODE HERE */
+//    struct matrix *temp;
+//    struct matrix m;
+//    temp = &m;
+//    mat = &temp;
+    (*mat)->rows = rows;
+    (*mat)->cols = cols;
+    if (rows<=0 || cols<=0){
+        return -1;
+    }
+    (*mat)->data = calloc(rows*cols, sizeof(double));
+    if ((*mat)->data == NULL){  // allocate fail
+        return -1;
+    }
+    (*mat)->parent = NULL;
+    (*mat)->ref_cnt = 1;
+    return 0;
 }
 
 /*
@@ -68,6 +84,23 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
  */
 int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int cols) {
     /* TODO: YOUR CODE HERE */
+//    struct matrix *temp;
+//    struct matrix m;
+//    temp = &m;
+//    mat = &temp;
+    (*mat)->rows = rows;
+    (*mat)->cols = cols;
+    if (rows<=0 || cols<=0){
+        return -1;
+    }
+    (*mat)->data = from->data + offset;
+    if ((*mat)->data == NULL){  // allocate fail
+        return -1;
+    }
+    (*mat)->parent = from;
+    from->ref_cnt += 1;
+    (*mat)->ref_cnt = from->ref_cnt;
+    return 0;
 }
 
 /*
@@ -77,6 +110,17 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
  */
 void deallocate_matrix(matrix *mat) {
     /* TODO: YOUR CODE HERE */
+    if (mat == NULL){
+        return;
+    }
+    if ((mat->parent == NULL && mat->ref_cnt == 1) ||
+    (mat->parent != NULL && mat->parent->ref_cnt == 1 && mat->ref_cnt == 1) ){
+        free(mat->data);
+    }
+    mat = NULL;
+
+/*  if `mat` is not a slice || and has no existing slices,
+ * or if `mat` is the last existing slice of its parent matrix and its parent matrix has no other references*/
 }
 
 /*
@@ -85,6 +129,7 @@ void deallocate_matrix(matrix *mat) {
  */
 double get(matrix *mat, int row, int col) {
     /* TODO: YOUR CODE HERE */
+    return mat->data[(mat->cols)*row + col];
 }
 
 /*
@@ -93,6 +138,7 @@ double get(matrix *mat, int row, int col) {
  */
 void set(matrix *mat, int row, int col, double val) {
     /* TODO: YOUR CODE HERE */
+    mat->data[(mat->cols)*row + col] = val;
 }
 
 /*
@@ -100,6 +146,9 @@ void set(matrix *mat, int row, int col, double val) {
  */
 void fill_matrix(matrix *mat, double val) {
     /* TODO: YOUR CODE HERE */
+    for (int i = 0; i < (mat->rows)*(mat->cols); i++) {
+        mat->data[i] = val;
+    }
 }
 
 /*
@@ -108,6 +157,14 @@ void fill_matrix(matrix *mat, double val) {
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
+        return -1;
+    }
+    allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int cols);
+    for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i]+mat2->data[i];
+    }
+    return 0;
 }
 
 /*
@@ -116,6 +173,13 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
+        return -1;
+    }
+    for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i]-mat2->data[i];
+    }
+    return 0;
 }
 
 /*
@@ -125,6 +189,27 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
+    if (mat1-cols != mat2->rows){
+        return -1;
+    }
+//    matrix *temp = NULL;
+//    if (result == mat1 || result == mat2){
+//        allocate_matrix(&temp, result->rows, result->cols);
+//    }else{
+//        temp = result;
+//    }
+    for (int i = 0; i < (mat1->rows); i++) {
+        for (int j = 0; j < (mat2->cols); j++) {
+            double value = 0;
+            for (int v = 0; v < (mat1->cols); v++) {
+                value += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
+            }
+            result->data[i * (mat1->rows) + j] = value;
+        }
+    }
+
+    return 0;
+
 }
 
 /*
@@ -132,8 +217,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
+struct matrix* helper(matrix *result, matrix *mat, int pow){
+    if (pow == 1){
+        result =
+    }
+    mul_matrix(result, helper(result, mat, pow-1), mat);
+}
+
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
+    if (mat->cols!=mat->rows){
+        return -1;
+    }
+    struct matrix temp;
+    result = helper(temp, mat, pow);
+    return 0;
 }
 
 /*
@@ -142,6 +240,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
  */
 int neg_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
+    if (mat == NULL){
+        return -1;
+    }
+    for (int i = 0; i < (mat->rows)*(mat->cols); i++) {
+        result->data[i] = -mat->data[i];
+    }
+    return 0;
 }
 
 /*
@@ -150,5 +255,16 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
+    if (mat == NULL){
+        return -1;
+    }
+    for (int i = 0; i < (mat->rows)*(mat->cols); i++) {
+        if (mat->data[i]<0){
+            result->data[i] = -mat->data[i];
+        }else{
+            result->data[i] = mat->data[i];
+        }
+    }
+    return 0;
 }
 
