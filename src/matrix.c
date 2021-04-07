@@ -272,7 +272,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     if (mat->cols!=mat->rows){
         return -1;
     }
-    result = helper(mat, pow);
+    result->data = helper(mat, pow)->data;
     printf("final: %f", get(result, 0, 0));
     printf("final: %f", get(result, 0, 1));
     printf("final: %f", get(result, 1, 0));
