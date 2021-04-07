@@ -138,6 +138,7 @@ double get(matrix *mat, int row, int col) {
  */
 void set(matrix *mat, int row, int col, double val) {
     /* TODO: YOUR CODE HERE */
+    printf("%d, %d, %f", row, col, val);
     mat->data[(mat->cols)*row + col] = val;
 }
 
