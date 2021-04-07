@@ -56,7 +56,9 @@ void rand_matrix(matrix *result, unsigned int seed, double low, double high) {
 int allocate_matrix(matrix **mat, int rows, int cols) {
     /* TODO: YOUR CODE HERE */
     struct matrix *temp = malloc(sizeof(struct matrix));
-//    if (temp = NULL)
+    if (temp == NULL){
+        return -1;
+    }
     if (rows<=0 || cols<=0){
         return -1;
     }
@@ -71,6 +73,23 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     temp->ref_cnt = 1;
     *mat = temp;
     return 0;
+// int allocate_matrix(matrix **mat, int rows, int cols) {
+//    struct matrix *temp;
+//    struct matrix m;
+//    temp = &m;
+//    mat = &temp;
+//    (*mat)->rows = rows;
+//    (*mat)->cols = cols;
+//    if (rows<=0 || cols<=0){
+//        return -1;
+//    }
+//    (*mat)->data = calloc(rows*cols, sizeof(double));
+//    if ((*mat)->data == NULL){  // allocate fail
+//        return -1;
+//    }
+//    (*mat)->parent = NULL;
+//    (*mat)->ref_cnt = 1;
+//    return 0;
 }
 
 /*
@@ -84,23 +103,37 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
  */
 int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int cols) {
     /* TODO: YOUR CODE HERE */
-    struct matrix *temp;
-    temp = *mat;
-    struct matrix m;
-    temp = &m;
-    mat = &temp;
-    (*mat)->rows = rows;
-    (*mat)->cols = cols;
+//    struct matrix *temp;
+//    temp = *mat;
+//    struct matrix m;
+//    temp = &m;
+//    mat = &temp;
+//    (*mat)->rows = rows;
+//    (*mat)->cols = cols;
+//    if (rows<=0 || cols<=0){
+//        return -1;
+//    }
+//    (*mat)->data = from->data + offset;
+//    if ((*mat)->data == NULL){  // allocate fail
+//        return -1;
+//    }
+//    (*mat)->parent = from;
+//    from->ref_cnt += 1;
+//    (*mat)->ref_cnt = from->ref_cnt;
+//    return 0;
+    struct matrix *temp = malloc(sizeof(struct matrix));
+    if (temp == NULL){
+        return -1;
+    }
     if (rows<=0 || cols<=0){
         return -1;
     }
-    (*mat)->data = from->data + offset;
-    if ((*mat)->data == NULL){  // allocate fail
-        return -1;
-    }
-    (*mat)->parent = from;
-    from->ref_cnt += 1;
-    (*mat)->ref_cnt = from->ref_cnt;
+    temp->rows = rows;
+    temp->cols = cols;
+    temp->data = from->data + offset;
+    temp->parent = NULL;
+    temp->ref_cnt = 1;
+    *mat = temp;
     return 0;
 }
 
