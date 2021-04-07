@@ -257,9 +257,10 @@ struct matrix* helper(matrix *result, matrix *mat, int pow){
     }
     struct matrix** temp;
     allocate_matrix(temp, mat->rows, mat->cols);
+    struct matrix* value;
     value = helper(result, mat, pow-1);
     mul_matrix(*temp, helper(result, mat, pow-1), mat);
-    deallocate_matrix(&value);
+    deallocate_matrix(value);
     return *temp;
 }
 
