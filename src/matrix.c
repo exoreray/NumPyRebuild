@@ -64,7 +64,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     temp->cols = cols;
 
     temp->data = calloc(rows*cols, sizeof(double));
-    if ((*mat)->data == NULL){  // allocate fail
+    if (temp->data == NULL){  // allocate fail
         return -1;
     }
     temp->parent = NULL;
