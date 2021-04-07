@@ -142,6 +142,7 @@ void pow_test(void) {
   CU_ASSERT_EQUAL(get(result, 1, 0), 2);
   CU_ASSERT_EQUAL(get(result, 1, 1), 1);
 
+  pow_matrix(result, mat, 10);
   CU_ASSERT_EQUAL(get(result, 0, 0), 89);
   CU_ASSERT_EQUAL(get(result, 0, 1), 55);
   CU_ASSERT_EQUAL(get(result, 1, 0), 55);
