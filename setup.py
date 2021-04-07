@@ -8,7 +8,7 @@ def main():
     # You may find this reference helpful: https://docs.python.org/3.6/extending/building.html
     # TODO: YOUR CODE HERE
     module1 = Extension('numc',
-                        sources=['numc.c'])
+                        sources=['/src/numc.c'])
 
     setup(name='numc',
           version='1.0',
