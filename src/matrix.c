@@ -273,6 +273,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         return -1;
     }
     result = helper(mat, pow);
+    printf("%f", get(result, 0, 0));
     return 0;
 }
 
