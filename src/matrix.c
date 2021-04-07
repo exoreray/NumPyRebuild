@@ -55,10 +55,10 @@ void rand_matrix(matrix *result, unsigned int seed, double low, double high) {
  */
 int allocate_matrix(matrix **mat, int rows, int cols) {
     /* TODO: YOUR CODE HERE */
-//    struct matrix *temp;
-//    struct matrix m;
-//    temp = &m;
-//    mat = &temp;
+    struct matrix *temp;
+    struct matrix m;
+    temp = &m;
+    mat = &temp;
     (*mat)->rows = rows;
     (*mat)->cols = cols;
     if (rows<=0 || cols<=0){
@@ -84,10 +84,10 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
  */
 int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int cols) {
     /* TODO: YOUR CODE HERE */
-//    struct matrix *temp;
-//    struct matrix m;
-//    temp = &m;
-//    mat = &temp;
+    struct matrix *temp;
+    struct matrix m;
+    temp = &m;
+    mat = &temp;
     (*mat)->rows = rows;
     (*mat)->cols = cols;
     if (rows<=0 || cols<=0){
