@@ -188,7 +188,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
-    if (mat1-cols != mat2->rows){
+    if (mat1->cols != mat2->rows){
         return -1;
     }
 //    matrix *temp = NULL;
