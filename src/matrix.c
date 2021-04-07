@@ -160,7 +160,6 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
         return -1;
     }
-    allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int cols);
     for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
         result->data[i] = mat1->data[i]+mat2->data[i];
     }
