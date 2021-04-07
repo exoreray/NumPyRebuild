@@ -261,7 +261,7 @@ struct matrix* helper(matrix *mat, int pow){
     preTemp = helper(mat, pow-1);
     mul_matrix(*temp, preTemp, mat);
     deallocate_matrix(preTemp);
-    return *temp;
+    return temp;
 }
 
 int pow_matrix(matrix *result, matrix *mat, int pow) {
