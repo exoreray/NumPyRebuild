@@ -251,7 +251,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
-struct matrix* helper(matrix *mat, int pow){
+struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
     if (pow == 1){
         return mat;
     }
