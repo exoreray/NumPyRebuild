@@ -251,16 +251,16 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
-struct matrix* helper(matrix *result, matrix *mat, int pow){
+struct matrix* helper(matrix *mat, int pow){
     if (pow == 1){
         return mat;
     }
     struct matrix** temp;
     allocate_matrix(temp, mat->rows, mat->cols);
-    struct matrix* value;
-    value = helper(result, mat, pow-1);
-    mul_matrix(*temp, helper(result, mat, pow-1), mat);
-    deallocate_matrix(value);
+    struct matrix* preTemp;
+    preTemp = helper(mat, pow-1);
+    mul_matrix(*temp, preTemp, mat);
+    deallocate_matrix(preTemp);
     return *temp;
 }
 
@@ -269,8 +269,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     if (mat->cols!=mat->rows){
         return -1;
     }
-    struct matrix temp;
-    result = helper(temp, mat, pow);
+    result = helper(mat, pow);
     return 0;
 }
 
