@@ -260,7 +260,9 @@ struct matrix* helper(matrix *mat, int pow){
     struct matrix* preTemp;
     preTemp = helper(mat, pow-1);
     mul_matrix(temp, preTemp, mat);
-    deallocate_matrix(preTemp);
+    if (pow > 2){
+        deallocate_matrix(preTemp);
+    }
     return temp;
 }
 
