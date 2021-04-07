@@ -138,7 +138,7 @@ double get(matrix *mat, int row, int col) {
  */
 void set(matrix *mat, int row, int col, double val) {
     /* TODO: YOUR CODE HERE */
-    mat->data[(mat->cols)*(row-1) + col] = val;
+    mat->data[(mat->cols)*(row-2) + col] = val;
 }
 
 /*
