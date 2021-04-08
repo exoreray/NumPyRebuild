@@ -18,16 +18,16 @@ class TestAdd(TestCase):
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(20, 20, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(20, 20, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(200, 200, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(200, 200, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "add")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
     def test_large_add(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(200, 200, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(200, 200, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(20000, 20000, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(20000, 20000, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "add")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
@@ -163,7 +163,7 @@ class TestIndexSet(TestCase):
         dp_mat[rand_row][rand_col] = 2
         nc_mat[rand_row][rand_col] = 2
         self.assertTrue(cmp_dp_nc_matrix(dp_mat, nc_mat))
-        self.assertEquals(nc_mat[rand_row][rand_col], 2)
+        self.assertEqual(nc_mat[rand_row][rand_col], 2)
 
 class TestSlice(TestCase):
     def test_slice(self):
