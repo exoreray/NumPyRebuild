@@ -49,11 +49,19 @@ class TestSub(TestCase):
 
     def test_medium_sub(self):
         # TODO: YOUR CODE HERE
-        pass
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(200, 200, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(200, 200, seed=1)
+        is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
 
     def test_large_sub(self):
         # TODO: YOUR CODE HERE
-        pass
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(20000, 20000, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(20000, 20000, seed=1)
+        is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
 
 class TestAbs(TestCase):
     def test_small_abs(self):
@@ -137,7 +145,7 @@ class TestSet(TestCase):
         dp_mat.set(rand_row, rand_col, 2)
         nc_mat.set(rand_row, rand_col, 2)
         self.assertTrue(cmp_dp_nc_matrix(dp_mat, nc_mat))
-        self.assertEquals(nc_mat.get(rand_row, rand_col), 2)
+        self.assertEqual(nc_mat.get(rand_row, rand_col), 2)
 
 class TestShape(TestCase):
     def test_shape(self):
