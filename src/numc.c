@@ -563,7 +563,7 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
     }
 
     /* Call function */
-    error_code = pow_nmatrix(result, self->mat, PyLong_AsLong(pow));
+    error_code = pow_matrix(result, self->mat, PyLong_AsLong(pow));
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "Fail to multiply!");
         return NULL;
@@ -581,12 +581,12 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
  */
 static PyNumberMethods Matrix61c_as_number = {
     /* TODO: YOUR CODE HERE */
-    binaryfunc Matrix61c_add,
-    binaryfunc Matrix61c_sub,
-    binaryfunc Matrix61c_multiply,
-    ternaryfunc Matrix61c_pow,
-    unaryfunc Matrix61c_neg,
-    unaryfunc Matrix61c_abs
+//    (binaryfunc) Matrix61c_add,
+//    (binaryfunc) Matrix61c_sub,
+//    (binaryfunc) Matrix61c_multiply,
+//    (ternaryfunc) Matrix61c_pow,
+//    (unaryfunc) Matrix61c_neg,
+//    (unaryfunc) Matrix61c_abs
 };
 
 
