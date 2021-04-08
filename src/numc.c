@@ -327,7 +327,7 @@ static PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     /*  check Dimension */
     if ( self->mat->rows < 1 || arg->mat->cols < 1 || self->mat->cols < 1 || arg->mat->rows < 1
     || arg->mat->rows != self->mat->rows || arg->mat->cols != self->mat->cols ) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
 
@@ -418,7 +418,7 @@ static PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
     Matrix61c* arg = (Matrix61c*) args;
     /*  check Dimension */
     if (self->mat->rows != arg->mat->cols) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
 
@@ -499,7 +499,7 @@ static PyObject *Matrix61c_abs(Matrix61c *self) {
 
     /*  check Dimension */
     if ( self->mat->rows < 1 || self->mat->cols < 1 ) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
 
@@ -544,13 +544,13 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
 
     /*  check Dimension */
     if ( self->mat->rows < 1 || self->mat->cols < 1 ) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
     /* check pow */
     /* TODO: or pow < 0. tick */
     if (!PyLong_Check(pow) || PyLong_AsLong(pow) < 0) {
-        PyErr_SetString(PyExc_TypeError, "Power invalid!");
+        PyErr_SetString(PyExc_ValueError, "Power invalid!");
         return NULL;
     }
 
@@ -613,7 +613,7 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
 
     /*  check Dimension */
     if (self->mat->rows < 1 || self->mat->cols < 1) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
 
@@ -641,7 +641,7 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     /* check row col range */
     if (0 > PyLong_AsLong(row) || PyLong_AsLong(row) >= self->mat->rows ||
     0 > PyLong_AsLong(col) || PyLong_AsLong(col) >= self->mat->cols) {
-        PyErr_SetString(PyExc_IndexError, "row/col Index range error!");
+        PyErr_SetString(PyExc_ValueError, "row/col Index range error!");
         return NULL;
     }
 
@@ -670,7 +670,7 @@ static PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
 
     /*  check Dimension */
     if (self->mat->rows < 1 || self->mat->cols < 1) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
 
@@ -697,7 +697,7 @@ static PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* check row col range */
     if (0 > PyLong_AsLong(row) || PyLong_AsLong(row) >= self->mat->rows ||
         0 > PyLong_AsLong(col) || PyLong_AsLong(col) >= self->mat->cols) {
-        PyErr_SetString(PyExc_IndexError, "row/col Index range error!");
+        PyErr_SetString(PyExc_ValueError, "row/col Index range error!");
         return NULL;
     }
 
