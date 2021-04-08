@@ -323,9 +323,10 @@ static PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
         return NULL;
     }
 
+    Matrix61c* arg = (Matrix61c*) args;
     /*  check Dimension */
-    if ( self->mat->rows < 1 || args->mat->cols < 1 || self->mat->cols < 1 || args->mat->rows < 1
-    || args->mat->rows != self->mat->rows || args->mat->cols != self->mat->cols ) {
+    if ( self->mat->rows < 1 || arg->mat->cols < 1 || self->mat->cols < 1 || arg->mat->rows < 1
+    || arg->mat->rows != self->mat->rows || arg->mat->cols != self->mat->cols ) {
         PyErr_SetString(PyExc_TypeError, " Dimension error!");
         return NULL;
     }
