@@ -373,7 +373,7 @@ static PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
     /*  check Dimension */
     if ( self->mat->rows < 1 || arg->mat->cols < 1 || self->mat->cols < 1 || arg->mat->rows < 1
          || arg->mat->rows != self->mat->rows || arg->mat->cols != self->mat->cols ) {
-        PyErr_SetString(PyExc_TypeError, " Dimension error!");
+        PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
 
