@@ -340,7 +340,7 @@ static PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     }
 
     /* Call function */
-    error_code = add_matrix(result, self->mat, args->mat);
+    error_code = add_matrix(result, self->mat, arg->mat);
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "Fail to add!");
         return NULL;
@@ -369,9 +369,10 @@ static PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
         return NULL;
     }
 
+    Matrix61c* arg = (Matrix61c*) args;
     /*  check Dimension */
-    if ( self->mat->rows < 1 || args->mat->cols < 1 || self->mat->cols < 1 || args->mat->rows < 1
-         || args->mat->rows != self->mat->rows || args->mat->cols != self->mat->cols ) {
+    if ( self->mat->rows < 1 || arg->mat->cols < 1 || self->mat->cols < 1 || arg->mat->rows < 1
+         || arg->mat->rows != self->mat->rows || arg->mat->cols != self->mat->cols ) {
         PyErr_SetString(PyExc_TypeError, " Dimension error!");
         return NULL;
     }
@@ -385,7 +386,7 @@ static PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
     }
 
     /* Call function */
-    error_code = sub_matrix(result, self->mat, args->mat);
+    error_code = sub_matrix(result, self->mat, arg->mat);
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "Fail to subtract!");
         return NULL;
@@ -414,29 +415,30 @@ static PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
         return NULL;
     }
 
+    Matrix61c* arg = (Matrix61c*) args;
     /*  check Dimension */
-    if (self->mat->rows != args->mat->cols) {
+    if (self->mat->rows != arg->mat->cols) {
         PyErr_SetString(PyExc_TypeError, " Dimension error!");
         return NULL;
     }
 
     /* Check allocate memory */
     matrix* result;
-    int error_code = allocate_matrix(&result, self->mat->rows, args->mat->cols);
+    int error_code = allocate_matrix(&result, self->mat->rows, arg->mat->cols);
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "allocate memory error!");
         return NULL;
     }
 
     /* Call function */
-    error_code = mul_matrix(result, self->mat, args->mat);
+    error_code = mul_matrix(result, self->mat, arg->mat);
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "Fail to multiply!");
         return NULL;
     }
 
     Matrix61c* ret = (Matrix61c*) Matrix61c_new(&Matrix61cType, NULL, NULL);
-    ret->shape = PyTuple_Pack(2, PyLong_FromLong(self->mat->rows), PyLong_FromLong(args->mat->cols));
+    ret->shape = PyTuple_Pack(2, PyLong_FromLong(self->mat->rows), PyLong_FromLong(arg->mat->cols));
     ret->mat = result;
     return (PyObject*) ret;
 }
@@ -467,7 +469,7 @@ static PyObject *Matrix61c_neg(Matrix61c* self) {
     }
 
     /* Call function */
-    error_code = neg_matrix(new_matrix, self->mat);
+    error_code = neg_matrix(result, self->mat);
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "Fail to negate!");
         return NULL;
@@ -561,7 +563,7 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
     }
 
     /* Call function */
-    error_code = pow_nmatrix(new_matrix, self->mat, PyLong_AsLong(pow));
+    error_code = pow_nmatrix(result, self->mat, PyLong_AsLong(pow));
     if (error_code) {
         PyErr_SetString(PyExc_RuntimeError, "Fail to multiply!");
         return NULL;
