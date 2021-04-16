@@ -204,7 +204,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         __m256d m3 =  _mm256_add_pd(m1, m2);
         _mm256_storeu_pd(result->data + i, m3);
     }
-
+    printf("!!!!!!!!!!!!!");
     return 0;
 }
 
