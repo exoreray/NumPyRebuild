@@ -195,9 +195,16 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
         return -1;
     }
-    for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
-        result->data[i] = mat1->data[i]+mat2->data[i];
+//    for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
+//        result->data[i] = mat1->data[i]+mat2->data[i];
+//    }
+    for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
+        __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
+        __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
+        __m256d m3 =  _mm256_add_pd(m1, m2);
+        _mm256_storeu_pd(result->data + i, m3);
     }
+
     return 0;
 }
 
