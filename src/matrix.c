@@ -202,15 +202,27 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel
     {
         #pragma omp for
-        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
+        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 16 * 16; i += 16) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
             __m256d m3 =  _mm256_add_pd(m1, m2);
             _mm256_storeu_pd(result->data + i, m3);
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i + 4);
+            __m256d m2 =  _mm256_loadu_pd(mat2->data + i + 4);
+            __m256d m3 =  _mm256_add_pd(m1, m2);
+            _mm256_storeu_pd(result->data + i + 4, m3);
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i + 8);
+            __m256d m2 =  _mm256_loadu_pd(mat2->data + i + 8);
+            __m256d m3 =  _mm256_add_pd(m1, m2);
+            _mm256_storeu_pd(result->data + i + 8, m3);
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i + 12);
+            __m256d m2 =  _mm256_loadu_pd(mat2->data + i + 12);
+            __m256d m3 =  _mm256_add_pd(m1, m2);
+            _mm256_storeu_pd(result->data + i + 12, m3);
         }
     }
     #pragma omp for
-    for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
+    for (int i = (mat1->rows)*(mat1->cols) / 16 * 16; i < (mat1->rows)*(mat1->cols); i++) {
         result->data[i] = mat1->data[i]+mat2->data[i];
     }
     return 0;
@@ -262,6 +274,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    }else{
 //        temp = result;
 //    }
+//    return 0;
+
     #pragma omp parallel
     {
         #pragma omp for
