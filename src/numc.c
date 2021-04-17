@@ -634,10 +634,12 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     PyObject *val = PyTuple_GetItem(args, 2);
 
     /* check row col */
-    if (!PyLong_Check(row) || !PyLong_Check(col) || !PyLong_Check(val)) {
-        PyErr_SetString(PyExc_TypeError, " row/col/val input type error!");
-        return NULL;
-    }
+//    if (!PyLong_Check(row) || !PyLong_Check(col) || !PyLong_Check(val)) {
+
+//    if (!PyLong_Check(row) || !PyLong_Check(col) || PyFloat_Check(val)) {
+//        PyErr_SetString(PyExc_TypeError, " row/col/val input type error!");
+//        return NULL;
+//    }
     /* check row col range */
     if (0 > PyLong_AsLong(row) || PyLong_AsLong(row) >= self->mat->rows ||
     0 > PyLong_AsLong(col) || PyLong_AsLong(col) >= self->mat->cols) {
@@ -646,7 +648,7 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     }
 
     /* Call function */
-    set(self->mat, PyLong_AsLong(row), PyLong_AsLong(col), PyLong_AsDouble(val));
+    set(self->mat, PyLong_AsLong(row), PyLong_AsLong(col), PyFloat_AsDouble(val));
     return Py_None;
 }
 
