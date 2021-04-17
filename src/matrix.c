@@ -266,7 +266,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     {
         #pragma omp for
         for (int i = 0; i < (mat1->rows); i++) {
-            #pragma omp for
             for (int j = 0; j < (mat2->cols); j++) {
                 double value = 0;
                 for (int v = 0; v < (mat1->cols); v++) {
