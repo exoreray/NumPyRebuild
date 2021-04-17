@@ -278,8 +278,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel
     {
     #pragma omp for
-        for (int j = 0; j < (mat2->cols); j++) {
-            for (int v = 0; v < (mat1->cols); v++) {
+        for (int v = 0; v < (mat1->cols); v++) {
+            for (int j = 0; j < (mat2->cols); j++) {
 //                double *m2col = malloc(sizeof(double)*mat2->rows);
 //                for (int w = 0; w < (mat2->rows); w++) {
 //                    m2col[w] = mat2->data[w*mat2->cols + j];
