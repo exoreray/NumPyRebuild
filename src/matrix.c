@@ -200,7 +200,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    }
     #pragma omp parallel
     {
-//        #pragma omp for
+        #pragma omp for
         for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
@@ -208,7 +208,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(result->data + i, m3);
         }
     }
-    printf("#########################");
+    #pragma omp for
     for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
         result->data[i] = mat1->data[i]+mat2->data[i];
     }    return 0;
