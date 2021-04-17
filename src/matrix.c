@@ -204,6 +204,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         __m256d m3 =  _mm256_add_pd(m1, m2);
         _mm256_storeu_pd(result->data + i, m3);
     }
+    printf("#########################");
     for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
         result->data[i] = mat1->data[i]+mat2->data[i];
     }    return 0;
