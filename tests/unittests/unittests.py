@@ -105,16 +105,16 @@ class TestMul(TestCase):
 
     def test_medium_mul(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(1000, 1000, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(1000, 1000, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(100, 100, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(100, 100, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
     def test_large_mul(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(4000, 4000, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(4000, 4000, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(200, 200, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(200, 200, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
