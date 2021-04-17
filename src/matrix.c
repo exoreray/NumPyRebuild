@@ -266,7 +266,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     for (int i = 0; i < (mat1->rows); i++) {
         for (int j = 0; j < (mat2->cols); j++) {
             for (int v = 0; v < (mat1->cols); v++) {
-                result->data[i * (mat1->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
+                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
             }
         }
     }
