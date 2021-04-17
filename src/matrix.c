@@ -261,37 +261,37 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        allocate_matrix(&temp, result->rows, result->cols);
 //    }else{
 //        temp = result;
-//    }
+//    } TA says no need to consider this scenario.
 
-//    for (int i = 0; i < (mat1->rows); i++) {
-//        for (int j = 0; j < (mat2->cols); j++) {
-//            double value = 0;
-//            for (int v = 0; v < (mat1->cols); v++) {
-//                value += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
-//            }
-//            result->data[i * (mat1->rows) + j] = value;
-//        }
-//    }
-//
-//    return 0;
-
-    #pragma omp parallel
-    {
-    #pragma omp for
-        for (int v = 0; v < (mat1->cols); v++) {
-            for (int j = 0; j < (mat2->cols); j++) {
-//                double *m2col = malloc(sizeof(double)*mat2->rows);
-//                for (int w = 0; w < (mat2->rows); w++) {
-//                    m2col[w] = mat2->data[w*mat2->cols + j];
-//                }
-                for (int i = 0; i < (mat1->rows); i++) {
-                    result->data[i * (mat1->rows) + j] +=
-                            mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
-                }
+    for (int i = 0; i < (mat1->rows); i++) {
+        for (int j = 0; j < (mat2->cols); j++) {
+            double value = 0;
+            for (int v = 0; v < (mat1->cols); v++) {
+                value += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
             }
+            result->data[i * (mat1->rows) + j] = value;
         }
     }
+
     return 0;
+
+//    #pragma omp parallel
+//    {
+//    #pragma omp for
+//        for (int v = 0; v < (mat1->cols); v++) {
+//            for (int j = 0; j < (mat2->cols); j++) {
+////                double *m2col = malloc(sizeof(double)*mat2->rows);
+////                for (int w = 0; w < (mat2->rows); w++) {
+////                    m2col[w] = mat2->data[w*mat2->cols + j];
+////                }
+//                for (int i = 0; i < (mat1->rows); i++) {
+//                    result->data[i * (mat1->rows) + j] +=
+//                            mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
+//                }
+//            }
+//        }
+//    }
+//    return 0;
 
 }
 
