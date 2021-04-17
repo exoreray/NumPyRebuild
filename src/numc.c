@@ -417,7 +417,7 @@ static PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
 
     Matrix61c* arg = (Matrix61c*) args;
     /*  check Dimension */
-    if (self->mat->rows != arg->mat->cols) {
+    if (self->mat->cols != arg->mat->rows) {
         PyErr_SetString(PyExc_ValueError, " Dimension error!");
         return NULL;
     }
