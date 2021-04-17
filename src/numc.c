@@ -646,7 +646,7 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     }
 
     /* Call function */
-    set(self->mat, PyLong_AsLong(row), PyLong_AsLong(col), PyLong_AsLong(val));
+    set(self->mat, PyLong_AsLong(row), PyLong_AsLong(col), PyLong_AsDouble(val));
     return Py_None;
 }
 
