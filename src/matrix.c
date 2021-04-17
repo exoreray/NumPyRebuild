@@ -230,20 +230,20 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    }
 //    return 0;
     #pragma omp parallel
-        {
-    #pragma omp for
-            for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
-                __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
-                __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
-                __m256d m3 =  _mm256_sub_pd(m1, m2);
-                _mm256_storeu_pd(result->data + i, m3);
-            }
+    {
+        #pragma omp for
+        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
+            __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
+            __m256d m3 =  _mm256_sub_pd(m1, m2);
+            _mm256_storeu_pd(result->data + i, m3);
         }
+    }
     #pragma omp for
-        for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
-            result->data[i] = mat1->data[i]-mat2->data[i];
-        }
-        return 0;
+    for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i]-mat2->data[i];
+    }
+    return 0;
 }
 
 /*
@@ -262,16 +262,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    }else{
 //        temp = result;
 //    }
-    for (int i = 0; i < (mat1->rows); i++) {
-        for (int j = 0; j < (mat2->cols); j++) {
-            double value = 0;
-            for (int v = 0; v < (mat1->cols); v++) {
-                value += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
+    #pragma omp parallel
+    {
+        #pragma omp for
+        for (int i = 0; i < (mat1->rows); i++) {
+            #pragma omp for
+            for (int j = 0; j < (mat2->cols); j++) {
+                double value = 0;
+                for (int v = 0; v < (mat1->cols); v++) {
+                    value += mat1->data[i * (mat1->cols) + v] * mat2->data[v * (mat2->cols) + j];
+                }
+                result->data[i * (mat1->rows) + j] = value;
             }
-            result->data[i * (mat1->rows) + j] = value;
         }
     }
-
     return 0;
 
 }
