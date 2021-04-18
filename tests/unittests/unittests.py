@@ -127,7 +127,7 @@ class TestPow(TestCase):
         # is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
         # self.assertTrue(is_correct)
         # print_speedup(speed_up)
-
+        pass
     def test_medium_pow(self):
         # TODO: YOUR CODE HERE
         pass
