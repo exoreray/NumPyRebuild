@@ -368,8 +368,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int k = 0; k < m2t_cols; k++) {
                 result->data[i * result_cols + j] +=
                         mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->rows) + k];
-                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
-                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->rows) + k);
+//                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
+//                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->rows) + k);
 
             }
         }
