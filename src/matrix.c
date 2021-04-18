@@ -306,6 +306,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int result_cols = mat2->cols;
     double* m2trans = calloc(m2t_rows * m2t_cols , sizeof(double));
 //  swap position block by block
+#pragma omp for
     for (int i = 0; i < mat2->rows / 4 * 4; i += 4){
         for (int j = 0; j < mat2->cols / 4 * 4; j += 4) {
             __m256d block0;
@@ -329,7 +330,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(m2trans + ((j + 3) * m2t_cols) + i, block3);
         }
     }
-    ////debug:
+
+////debug:
 //    for (int i = 0; i < mat2->cols; i++) {
 //        printf("\n");
 //        for (int j = 0; j < mat2->rows; j++) {
