@@ -37,7 +37,7 @@ def dp_nc_matrix(*args, **kwargs):
 Returns a random dumbpy matrix and a random numc matrix with the same data
 seed, low, and high are optional
 """
-def rand_dp_nc_matrix(rows, cols, low=0, high=1, seed=0):
+# def rand_dp_nc_matrix(rows, cols, low=0, high=1, seed=0):
     return dp.Matrix(rows, cols, low=low, high=high,rand=True, seed=seed), nc.Matrix(rows, cols, low=low, high=high, rand=True, seed=seed)
 
 
@@ -84,8 +84,8 @@ def compute(dp_mat_lst: List[Union[dp.Matrix, int]],
         dp_end = time.time()
     # Check for correctness
     is_correct = cmp_dp_nc_matrix(nc_result, dp_result)
-    if not is_correct:
-        print(nc_result, dp_result)
+    # if not is_correct:
+    #     print(nc_result, dp_result)
     return is_correct, (dp_end - dp_start) / (nc_end - nc_start)
 
 """
