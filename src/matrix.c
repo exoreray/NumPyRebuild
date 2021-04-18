@@ -281,22 +281,22 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    }
 //    return 0;
 
-
-    for (int i = 0; i < mat1->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat1->cols; j++) {
-            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
-        }
-        printf("\n");
-    }
-
-    for (int i = 0; i < mat2->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat2->cols; j++) {
-            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
-        }
-        printf("\n");
-    }
+//// debug:
+//    for (int i = 0; i < mat1->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat1->cols; j++) {
+//            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
+//        }
+//        printf("\n");
+//    }
+//
+//    for (int i = 0; i < mat2->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat2->cols; j++) {
+//            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
+//        }
+//        printf("\n");
+//    }
 
 //// parallel solution:
 //  make m2 trans matrix solution:
@@ -340,17 +340,18 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             *(m2trans + (m2t_cols * j) + i) = *(mat2->data + (mat2->cols * i) + j);
         }
     }
-
-    for (int i = 0; i < mat2->cols; i++) {
-        printf("\n");
-        for (int j = 0; j < mat2->rows; j++) {
-    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
-    	}
-    	printf("\n");
-    }
+////debug:
+//    for (int i = 0; i < mat2->cols; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat2->rows; j++) {
+//    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
+//    	}
+//    	printf("\n");
+//    }
 
 
 // computation:
+#pragma omp parallel for
     for (int i = 0; i < result_rows; i++) {
         for (int j = 0; j < m2t_rows; j++) {
             for (int k = 0; k < m2t_cols; k++) {
@@ -362,14 +363,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             }
         }
     }
-
-    for (int i = 0; i < mat1->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat2->cols; j++) {
-            printf("%lf,", result->data[(i * mat2->cols) + j]);
-        }
-        printf("\n");
-    }
+//// debug:
+//    for (int i = 0; i < mat1->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat2->cols; j++) {
+//            printf("%lf,", result->data[(i * mat2->cols) + j]);
+//        }
+//        printf("\n");
+//    }
 
     return 0;
 
