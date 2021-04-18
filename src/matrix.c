@@ -294,40 +294,40 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             __m256d block2;
             __m256d block3;
 
-            double* data0 = *(mat2->data) + ((i + 0) * mat2->cols) + j;
-            double* data1 = *(mat2->data) + ((i + 1) * mat2->cols) + j;
-            double* data2 = *(mat2->data) + ((i + 2) * mat2->cols) + j;
-            double* data3 = *(mat2->data) + ((i + 3) * mat2->cols) + j;
+            double* data0 = mat2->data + ((i + 0) * mat2->cols) + j;
+            double* data1 = mat2->data + ((i + 1) * mat2->cols) + j;
+            double* data2 = mat2->data + ((i + 2) * mat2->cols) + j;
+            double* data3 = mat2->data + ((i + 3) * mat2->cols) + j;
 
             block0 = _mm256_set_pd(*(data0 + 0), *(data1 + 0), *(data2 + 0), *(data3 + 0));
             block1 = _mm256_set_pd(*(data0 + 1), *(data1 + 1), *(data2 + 1), *(data3 + 1));
             block2 = _mm256_set_pd(*(data0 + 2), *(data1 + 2), *(data2 + 2), *(data3 + 2));
             block3 = _mm256_set_pd(*(data0 + 3), *(data1 + 3), *(data2 + 3), *(data3 + 3));
 
-            _mm256_storeu_pd(m2trans + ((j + 0) * m2t_cols) + i, block1);
-            _mm256_storeu_pd(m2trans + ((j + 1) * m2t_cols) + i, block2);
-            _mm256_storeu_pd(m2trans + ((j + 2) * m2t_cols) + i, block3);
-            _mm256_storeu_pd(m2trans + ((j + 3) * m2t_cols) + i, block4);
+            _mm256_storeu_pd(m2trans + ((j + 0) * m2t_cols) + i, block0);
+            _mm256_storeu_pd(m2trans + ((j + 1) * m2t_cols) + i, block1);
+            _mm256_storeu_pd(m2trans + ((j + 2) * m2t_cols) + i, block2);
+            _mm256_storeu_pd(m2trans + ((j + 3) * m2t_cols) + i, block3);
         }
     }
     // tail case
     for (int i = 0; i < mat2->rows / 4 * 4; i++) {
         for (int j = mat2->cols / 4 * 4; j < mat2->cols; j++) {
-            *(m2trans + (m2t_cols * j) + i) = *(*(mat2->data) + (mat2->cols * i) + j);
+            *(m2trans + (m2t_cols * j) + i) = *(mat2->data + (mat2->cols * i) + j);
         }
     }
     for (int i = mat2->rows / 4 * 4; i < mat2->rows; i++) {
         for (int j = 0; j < mat2->cols; j++) {
-            *(m2trans + (m2t_cols * j) + i) = *(*(mat2->data) + (mat2->cols * i) + j);
+            *(m2trans + (m2t_cols * j) + i) = *(mat2->data + (mat2->cols * i) + j);
         }
     }
 
 // computation:
     for (int i = 0; i < (mat1->rows); i++) {
         for (int j = 0; j < (mat2->cols); j++) {
-            for (int v = 0; v < (mat1->cols); v++) {
+            for (int k = 0; k < (mat1->cols); k++) {
                 result->data[i * (mat2->cols) + j] +=
-                        mat1->data[i*(mat1->cols)+v]*m2trans[j*(mat2->cols)+v];
+                        mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->cols) + k];
             }
         }
     }
