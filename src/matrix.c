@@ -369,8 +369,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         for (int j = 0; j < m2t_rows; j++) {
             __m256d m1m2t = _mm256_set1_pd(0);
             for (int k = 0; k < m2t_cols / 4 * 4; k+=4) {
-                result->data[i * result_cols + j] +=
-                        mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->rows) + k];
+////              non simd solution:
+//                result->data[i * result_cols + j] +=
+//                        mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->rows) + k];
+////              debug:
 //                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
 //                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->rows) + k);
                 __m256d m1 = _mm256_loadu_pd(mat1->data + i * mat1->cols + k);
