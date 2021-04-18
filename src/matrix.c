@@ -293,6 +293,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //  make m2 trans matrix solution:
     int m2t_rows = mat2->cols;
     int m2t_cols = mat2->rows;
+    int result_rows = mat1->rows;
+    int result_cols = mat2->cols;
     double* m2trans = calloc(m2t_rows * m2t_cols , sizeof(double));
 //  swap position block by block
     for (int i = 0; i < mat2->rows / 4 * 4; i += 4){
@@ -340,10 +342,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
 // computation:
-    for (int i = 0; i < (mat1->rows); i++) {
-        for (int j = 0; j < (mat2->cols); j++) {
-            for (int k = 0; k < (mat1->cols); k++) {
-                result->data[i * (mat2->cols) + j] +=
+    for (int i = 0; i < result_rows; i++) {
+        for (int j = 0; j < m2t_rows; j++) {
+            for (int k = 0; k < m2t_cols; k++) {
+                result->data[i * result_cols + j] +=
                         mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->cols) + k];
             }
         }
