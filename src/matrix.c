@@ -264,6 +264,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->cols != mat2->rows){
         return -1;
     }
+//// non parallel solution
 //    matrix *temp = NULL;
 //    if (result == mat1 || result == mat2){
 //        allocate_matrix(&temp, result->rows, result->cols);
@@ -271,33 +272,80 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        temp = result;
 //    } TA says no need to consider this scenario.
 
-    for (int i = 0; i < (mat1->rows); i++) {
-        for (int j = 0; j < (mat2->cols); j++) {
-            for (int v = 0; v < (mat1->cols); v++) {
-                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
-            }
-        }
-    }
-
-    return 0;
-
-//    #pragma omp parallel
-//    {
-//    #pragma omp for
-//        for (int v = 0; v < (mat1->cols); v++) {
-//            for (int j = 0; j < (mat2->cols); j++) {
-////                double *m2col = malloc(sizeof(double)*mat2->rows);
-////                for (int w = 0; w < (mat2->rows); w++) {
-////                    m2col[w] = mat2->data[w*mat2->cols + j];
-////                }
-//                for (int i = 0; i < (mat1->rows); i++) {
-//                    result->data[i * (mat1->rows) + j] +=
-//                            mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
-//                }
+//    for (int i = 0; i < (mat1->rows); i++) {
+//        for (int j = 0; j < (mat2->cols); j++) {
+//            for (int v = 0; v < (mat1->cols); v++) {
+//                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
 //            }
 //        }
 //    }
 //    return 0;
+
+//// parallel solution:
+//  make m2 trans matrix solution:
+    int m2t_rows = mat2->cols;
+    int m2t_cols = mat2->rows;
+    double* m2trans = calloc(m2t_rows * m2t_cols , sizeof(double));
+//  swap position block by block
+    for (int i = 0; i < mat2->rows / 4 * 4; i += 4){
+        for (int j = 0; j < mat2->cols / 4 * 4; j += 4) {
+            __m256d block0;
+            __m256d block1;
+            __m256d block2;
+            __m256d block3;
+
+            double* data0 = *(mat2->data) + ((i + 0) * mat2->cols) + j;
+            double* data1 = *(mat2->data) + ((i + 1) * mat2->cols) + j;
+            double* data2 = *(mat2->data) + ((i + 2) * mat2->cols) + j;
+            double* data3 = *(mat2->data) + ((i + 3) * mat2->cols) + j;
+
+            block0 = _mm256_set_pd(*(data0 + 0), *(data1 + 0), *(data2 + 0), *(data3 + 0));
+            block1 = _mm256_set_pd(*(data0 + 1), *(data1 + 1), *(data2 + 1), *(data3 + 1));
+            block2 = _mm256_set_pd(*(data0 + 2), *(data1 + 2), *(data2 + 2), *(data3 + 2));
+            block3 = _mm256_set_pd(*(data0 + 3), *(data1 + 3), *(data2 + 3), *(data3 + 3));
+
+            _mm256_storeu_pd(m2trans + ((j + 0) * m2t_cols) + i, block1);
+            _mm256_storeu_pd(m2trans + ((j + 1) * m2t_cols) + i, block2);
+            _mm256_storeu_pd(m2trans + ((j + 2) * m2t_cols) + i, block3);
+            _mm256_storeu_pd(m2trans + ((j + 3) * m2t_cols) + i, block4);
+        }
+    }
+    // tail case
+    for (int i = 0; i < mat2->rows / 4 * 4; i++) {
+        for (int j = mat2->cols / 4 * 4; j < mat2->cols; j++) {
+            *(m2trans + (m2t_cols * j) + i) = *(*(mat2->data) + (mat2->cols * i) + j);
+        }
+    }
+    for (int i = mat2->rows / 4 * 4; i < mat2->rows; i++) {
+        for (int j = 0; j < mat2->cols; j++) {
+            *(m2trans + (m2t_cols * j) + i) = *(*(mat2->data) + (mat2->cols * i) + j);
+        }
+    }
+
+// computation:
+    for (int i = 0; i < (mat1->rows); i++) {
+        for (int j = 0; j < (mat2->cols); j++) {
+            for (int v = 0; v < (mat1->cols); v++) {
+                result->data[i * (mat2->cols) + j] +=
+                        mat1->data[i*(mat1->cols)+v]*m2trans[j*(mat2->cols)+v];
+            }
+        }
+    }
+    return 0;
+
+////  no transpose solution:
+//    for (int i = 0; i < mat2->rows / 4 * 4; i += 4){
+//        for (int j = 0; j < mat1->rows; j += 1) {
+//            for (int k = 0; k < mat2->cols; k += 1) {
+//            double* data0 = *(mat2->data) + (i + 0) * mat2->cols;
+//            double* data1 = *(mat2->data) + (i + 1) * mat2->cols;
+//            double* data2 = *(mat2->data) + (i + 2) * mat2->cols;
+//            double* data3 = *(mat2->data) + (i + 3) * mat2->cols;
+//            block0 = _mm256_set_pd(*(data0 + k), *(data1 + k), *(data2 + k), *(data3 + k));
+//            _mm256_storeu_pd(result + (j + 0) * result->cols + i, block1);
+//            }
+//        }
+//    }
 
 }
 
