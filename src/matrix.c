@@ -383,7 +383,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             // tail case for  [][][][]..  *   [][][][]..
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
-                sum += (*(mat1->data + i * mat1->cols + k)) * m2trans[j * m2t_cols + k]);
+                sum += (*(mat1->data + i * mat1->cols + k)) * m2trans[j * m2t_cols + k];
             }
             *(result->data + i * result_cols + j) = sum;
         }
