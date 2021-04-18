@@ -202,16 +202,20 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel
     {
         #pragma omp for
-        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
+        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 8 * 8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
-            __m256d m3 =  _mm256_add_pd(m1, m2);
-            _mm256_storeu_pd(result->data + i, m3);
+            __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
+            __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
+            __m256d m5 =  _mm256_add_pd(m1, m2);
+            __m256d m6 =  _mm256_add_pd(m3, m4);
+            _mm256_storeu_pd(result->data + i, m5);
+            _mm256_storeu_pd(result->data + i + 4, m6);
         }
     }
     #pragma omp for
-    for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
-        result->data[i] = mat1->data[i]+mat2->data[i];
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i] + mat2->data[i];
     }
     return 0;
 }
@@ -229,19 +233,23 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        result->data[i] = mat1->data[i]-mat2->data[i];
 //    }
 //    return 0;
-    #pragma omp parallel
+#pragma omp parallel
     {
-        #pragma omp for
-        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 4 * 4; i += 4) {
+#pragma omp for
+        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 8 * 8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
-            __m256d m3 =  _mm256_sub_pd(m1, m2);
-            _mm256_storeu_pd(result->data + i, m3);
+            __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
+            __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
+            __m256d m5 =  _mm256_sub_pd(m1, m2);
+            __m256d m6 =  _mm256_sub_pd(m3, m4);
+            _mm256_storeu_pd(result->data + i, m5);
+            _mm256_storeu_pd(result->data + i + 4, m6);
         }
     }
-    #pragma omp for
-    for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i++) {
-        result->data[i] = mat1->data[i]-mat2->data[i];
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i] - mat2->data[i];
     }
     return 0;
 }
@@ -298,28 +306,50 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
-struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
-    if (pow == 1){
-        return mat;
-    }
-    struct matrix* temp = NULL;
-    allocate_matrix(&temp, mat->rows, mat->cols);
-    struct matrix* preTemp;
-    preTemp = helper(mat, pow-1);
-    mul_matrix(temp, mat, preTemp);
-    if (pow > 2){
-        deallocate_matrix(preTemp);
-    }
-    return temp;
-}
+
+//solution 1:
+//struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
+//    if (pow == 1){
+//        return mat;
+//    }
+//    struct matrix* temp = NULL;
+//    allocate_matrix(&temp, mat->rows, mat->cols);
+//    struct matrix* preTemp;
+//    preTemp = helper(mat, pow-1);
+//    mul_matrix(temp, mat, preTemp);
+//    if (pow > 2){
+//        deallocate_matrix(preTemp);
+//    }
+//    return temp;
+//}
 
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
-    if (mat->cols!=mat->rows){
-        return -1;
+//    solution 1:
+//    if (mat->cols!=mat->rows){
+//        return -1;
+//    }
+//    result->data = helper(mat, pow)->data;
+//    return 0;
+    int currPow = 1;
+    struct matrix* temp = NULL;
+    allocate_matrix(&temp, mat->rows, mat->cols);
+    for (int i = 0; i < mat->rows; i++) {
+        for (int j = 0; j < mat->cols; j++) {
+            set(temp, i, j, mat->data[(mat->cols)*i + j]);
+        }
     }
-    result->data = helper(mat, pow)->data;
-    return 0;
+    while(currPow < pow){
+
+        mul_matrix(result, temp, temp);
+        for (int i = 0; i < mat->rows; i++) {
+            for (int j = 0; j < mat->cols; j++) {
+                set(temp, i, j, result->data[(mat->cols)*i + j]);
+            }
+        }
+        currPow *= 2;
+    }
+    deallocate_matrix(temp);
 }
 
 /*
