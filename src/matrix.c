@@ -321,7 +321,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             *(m2trans + (m2t_cols * j) + i) = *(mat2->data + (mat2->cols * i) + j);
         }
     }
-
 // computation:
     for (int i = 0; i < (mat1->rows); i++) {
         for (int j = 0; j < (mat2->cols); j++) {
