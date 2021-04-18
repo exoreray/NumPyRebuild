@@ -308,48 +308,50 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 
 //solution 1:
-//struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
-//    if (pow == 1){
-//        return mat;
-//    }
-//    struct matrix* temp = NULL;
-//    allocate_matrix(&temp, mat->rows, mat->cols);
-//    struct matrix* preTemp;
-//    preTemp = helper(mat, pow-1);
-//    mul_matrix(temp, mat, preTemp);
-//    if (pow > 2){
-//        deallocate_matrix(preTemp);
-//    }
-//    return temp;
-//}
+struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
+    if (pow == 1){
+        return mat;
+    }
+    struct matrix* temp = NULL;
+    allocate_matrix(&temp, mat->rows, mat->cols);
+    struct matrix* preTemp;
+    preTemp = helper(mat, pow-1);
+    mul_matrix(temp, mat, preTemp);
+    if (pow > 2){
+        deallocate_matrix(preTemp);
+    }
+    return temp;
+}
 
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
-//    solution 1:
-//    if (mat->cols!=mat->rows){
-//        return -1;
-//    }
-//    result->data = helper(mat, pow)->data;
-//    return 0;
-    int currPow = 1;
-    struct matrix* temp = NULL;
-    allocate_matrix(&temp, mat->rows, mat->cols);
-    for (int i = 0; i < mat->rows; i++) {
-        for (int j = 0; j < mat->cols; j++) {
-            set(temp, i, j, mat->data[(mat->cols)*i + j]);
-        }
+    solution 1:
+    if (mat->cols!=mat->rows){
+        return -1;
     }
-    while(currPow < pow){
+    result->data = helper(mat, pow)->data;
+    return 0;
 
-        mul_matrix(result, temp, temp);
-        for (int i = 0; i < mat->rows; i++) {
-            for (int j = 0; j < mat->cols; j++) {
-                set(temp, i, j, result->data[(mat->cols)*i + j]);
-            }
-        }
-        currPow *= 2;
-    }
-    deallocate_matrix(temp);
+
+//    int currPow = 1;
+//    struct matrix* temp = NULL;
+//    allocate_matrix(&temp, mat->rows, mat->cols);
+//    for (int i = 0; i < mat->rows; i++) {
+//        for (int j = 0; j < mat->cols; j++) {
+//            set(temp, i, j, mat->data[(mat->cols)*i + j]);
+//        }
+//    }
+//    while(currPow < pow){
+//
+//        mul_matrix(result, temp, temp);
+//        for (int i = 0; i < mat->rows; i++) {
+//            for (int j = 0; j < mat->cols; j++) {
+//                set(temp, i, j, result->data[(mat->cols)*i + j]);
+//            }
+//        }
+//        currPow *= 2;
+//    }
+//    deallocate_matrix(temp);
 }
 
 /*
