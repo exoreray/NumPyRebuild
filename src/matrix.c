@@ -265,38 +265,38 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
 //// non parallel solution
-//    matrix *temp = NULL;
-//    if (result == mat1 || result == mat2){
-//        allocate_matrix(&temp, result->rows, result->cols);
-//    }else{
-//        temp = result;
-//    } TA says no need to consider this scenario.
+    matrix *temp = NULL;
+    if (result == mat1 || result == mat2){
+        allocate_matrix(&temp, result->rows, result->cols);
+    }else{
+        temp = result;
+    } TA says no need to consider this scenario.
 
-//    for (int i = 0; i < (mat1->rows); i++) {
-//        for (int j = 0; j < (mat2->cols); j++) {
-//            for (int v = 0; v < (mat1->cols); v++) {
-//                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
-//            }
-//        }
-//    }
-//    return 0;
+    for (int i = 0; i < (mat1->rows); i++) {
+        for (int j = 0; j < (mat2->cols); j++) {
+            for (int v = 0; v < (mat1->cols); v++) {
+                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
+            }
+        }
+    }
+    return 0;
 
 //// debug:
-//    for (int i = 0; i < mat1->rows; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat1->cols; j++) {
-//            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
-//        }
-//        printf("\n");
-//    }
-//
-//    for (int i = 0; i < mat2->rows; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->cols; j++) {
-//            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
-//        }
-//        printf("\n");
-//    }
+    for (int i = 0; i < mat1->rows; i++) {
+        printf("\n");
+        for (int j = 0; j < mat1->cols; j++) {
+            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < mat2->rows; i++) {
+        printf("\n");
+        for (int j = 0; j < mat2->cols; j++) {
+            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
+        }
+        printf("\n");
+    }
 
 //// parallel solution:
 //  make m2 trans matrix solution:
@@ -341,13 +341,13 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
 ////debug:
-//    for (int i = 0; i < mat2->cols; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->rows; j++) {
-//    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
-//    	}
-//    	printf("\n");
-//    }
+    for (int i = 0; i < mat2->cols; i++) {
+        printf("\n");
+        for (int j = 0; j < mat2->rows; j++) {
+    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
+    	}
+    	printf("\n");
+    }
 
 
 // computation:
@@ -357,20 +357,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int k = 0; k < m2t_cols; k++) {
                 result->data[i * result_cols + j] +=
                         mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->rows) + k];
-//                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
-//                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->cols) + k);
+                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
+                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->cols) + k);
 
             }
         }
     }
 //// debug:
-//    for (int i = 0; i < mat1->rows; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->cols; j++) {
-//            printf("%lf,", result->data[(i * mat2->cols) + j]);
-//        }
-//        printf("\n");
-//    }
+    for (int i = 0; i < mat1->rows; i++) {
+        printf("\n");
+        for (int j = 0; j < mat2->cols; j++) {
+            printf("%lf,", result->data[(i * mat2->cols) + j]);
+        }
+        printf("\n");
+    }
 
     return 0;
 
