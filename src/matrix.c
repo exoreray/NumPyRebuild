@@ -313,10 +313,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             __m256d block2;
             __m256d block3;
 
-            double* data0 = mat2->data + ((i + 0) * mat2->cols) + j;
-            double* data1 = mat2->data + ((i + 1) * mat2->cols) + j;
-            double* data2 = mat2->data + ((i + 2) * mat2->cols) + j;
-            double* data3 = mat2->data + ((i + 3) * mat2->cols) + j;
+            double* data3 = mat2->data + ((i + 0) * mat2->cols) + j;
+            double* data2 = mat2->data + ((i + 1) * mat2->cols) + j;
+            double* data1 = mat2->data + ((i + 2) * mat2->cols) + j;
+            double* data0 = mat2->data + ((i + 3) * mat2->cols) + j;
 
             block0 = _mm256_set_pd(*(data0 + 0), *(data1 + 0), *(data2 + 0), *(data3 + 0));
             block1 = _mm256_set_pd(*(data0 + 1), *(data1 + 1), *(data2 + 1), *(data3 + 1));
