@@ -10,8 +10,8 @@ advise you to modify them and add new tests.
 class TestAdd(TestCase):
     def test_small_add(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(2, 2, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(2, 2, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(11, 11, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(11, 11, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "add")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
@@ -35,8 +35,8 @@ class TestAdd(TestCase):
 class TestSub(TestCase):
     def test_small_sub(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(2, 2, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(2, 2, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(13, 13, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(13, 13, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
         self.assertTrue(is_correct)
         # try:
@@ -106,16 +106,16 @@ class TestMul(TestCase):
 
     def test_medium_mul(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(3, 6, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(6, 9, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(300, 600, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(600, 900, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
         pass
     def test_large_mul(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(200, 300, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(300, 400, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(300, 1000, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(1000, 1200, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
@@ -123,17 +123,63 @@ class TestMul(TestCase):
 class TestPow(TestCase):
     def test_small_pow(self):
         # TODO: YOUR CODE HERE
+        dp_mat, nc_mat = rand_dp_nc_matrix(0, 0, seed=0)
+        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
+        pass
+
+
+    def test_small_pow(self):
+        # TODO: YOUR CODE HERE
+        dp_mat, nc_mat = rand_dp_nc_matrix(1, 1, seed=0)
+        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
+        pass
+
+
+    def test_small_pow(self):
+        # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(2, 2, seed=0)
         is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
         pass
-    def test_medium_pow(self):
+
+    def test_small_pow(self):
         # TODO: YOUR CODE HERE
+        dp_mat, nc_mat = rand_dp_nc_matrix(3, 3, seed=0)
+        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
+        pass
+
+    def test_small_pow(self):
+        # TODO: YOUR CODE HERE
+        dp_mat, nc_mat = rand_dp_nc_matrix(4, 4, seed=0)
+        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
+        pass
+
+
+def test_medium_pow(self):
+        # TODO: YOUR CODE HERE
+        pass
+        dp_mat, nc_mat = rand_dp_nc_matrix(11, 11, seed=0)
+        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
         pass
 
     def test_large_pow(self):
         # TODO: YOUR CODE HERE
+        pass
+        dp_mat, nc_mat = rand_dp_nc_matrix(120, 120, seed=0)
+        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
         pass
 
 class TestGet(TestCase):
