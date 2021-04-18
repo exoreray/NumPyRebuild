@@ -265,21 +265,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
 //// non parallel solution
-    matrix *temp = NULL;
-    if (result == mat1 || result == mat2){
-        allocate_matrix(&temp, result->rows, result->cols);
-    }else{
-        temp = result;
-    } TA says no need to consider this scenario.
+//    matrix *temp = NULL;
+//    if (result == mat1 || result == mat2){
+//        allocate_matrix(&temp, result->rows, result->cols);
+//    }else{
+//        temp = result;
+//    } TA says no need to consider this scenario.
 
-    for (int i = 0; i < (mat1->rows); i++) {
-        for (int j = 0; j < (mat2->cols); j++) {
-            for (int v = 0; v < (mat1->cols); v++) {
-                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
-            }
-        }
-    }
-    return 0;
+//    for (int i = 0; i < (mat1->rows); i++) {
+//        for (int j = 0; j < (mat2->cols); j++) {
+//            for (int v = 0; v < (mat1->cols); v++) {
+//                result->data[i * (mat2->cols) + j] += mat1->data[i*(mat1->cols)+v]*mat2->data[v*(mat2->cols)+j];
+//            }
+//        }
+//    }
+//    return 0;
 
 //// debug:
     for (int i = 0; i < mat1->rows; i++) {
