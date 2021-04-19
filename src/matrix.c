@@ -548,6 +548,16 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 //        return 0;
 //    }
 
+
+////debug:
+    for (int i = 0; i < mat->rows; i++) {
+        printf("\n");
+        for (int j = 0; j < mat->cols; j++) {
+    		printf("%lf,", m2trans[(i * mat->cols) + j]);
+    	}
+    	printf("\n");
+    }
+
 // init result to identity matrix
     for (int i = 0; i < (result->rows); i++) {
         for (int j = 0; j < (result->cols); j++) {

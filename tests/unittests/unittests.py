@@ -144,35 +144,35 @@ class TestPow(TestCase):
     def test_small_pow1(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(3, 3, seed=0)
-        is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
-        pass
-
-
-    def test_small_pow2(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(4, 4, seed=0)
-        is_correct, speed_up = compute([dp_mat, 2], [nc_mat, 2], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
-        pass
-
-    def test_small_pow3(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(5, 5, seed=0)
         is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
         pass
 
-    def test_small_pow4(self):
-        # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(7, 7, seed=0)
-        is_correct, speed_up = compute([dp_mat, 4], [nc_mat, 4], "pow")
-        self.assertTrue(is_correct)
-        print_speedup(speed_up)
-        pass
+    #
+    # def test_small_pow2(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(4, 4, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 2], [nc_mat, 2], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
+    #     pass
+    #
+    # def test_small_pow3(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(5, 5, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
+    #     pass
+    #
+    # def test_small_pow4(self):
+    #     # TODO: YOUR CODE HERE
+    #     dp_mat, nc_mat = rand_dp_nc_matrix(7, 7, seed=0)
+    #     is_correct, speed_up = compute([dp_mat, 4], [nc_mat, 4], "pow")
+    #     self.assertTrue(is_correct)
+    #     print_speedup(speed_up)
+    #     pass
     #
     # def test_medium_pow(self):
     #     # TODO: YOUR CODE HERE
