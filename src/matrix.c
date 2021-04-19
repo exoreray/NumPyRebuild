@@ -199,18 +199,17 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        result->data[i] = mat1->data[i]+mat2->data[i];
 //    }
 //    return 0;
+    int length_floor8 = (mat1->rows)*(mat1->cols) / 8 * 8;
     #pragma omp parallel
     {
         #pragma omp for
-        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 8 * 8; i += 8) {
+        for(unsigned int i = 0; i < length_floor8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
             __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
             __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
-            __m256d m5 =  _mm256_add_pd(m1, m2);
-            __m256d m6 =  _mm256_add_pd(m3, m4);
-            _mm256_storeu_pd(result->data + i, m5);
-            _mm256_storeu_pd(result->data + i + 4, m6);
+            _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, m2));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m3, m4));
         }
     }
     #pragma omp for
@@ -233,18 +232,17 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        result->data[i] = mat1->data[i]-mat2->data[i];
 //    }
 //    return 0;
+    int length_floor8 = (mat1->rows)*(mat1->cols) / 8 * 8;
 #pragma omp parallel
     {
 #pragma omp for
-        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 8 * 8; i += 8) {
+        for(unsigned int i = 0; i < length_floor8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
             __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
             __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
-            __m256d m5 =  _mm256_sub_pd(m1, m2);
-            __m256d m6 =  _mm256_sub_pd(m3, m4);
-            _mm256_storeu_pd(result->data + i, m5);
-            _mm256_storeu_pd(result->data + i + 4, m6);
+            _mm256_storeu_pd(result->data + i, _mm256_sub_pd(m1, m2));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(m3, m4));
         }
     }
 #pragma omp for
@@ -487,7 +485,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     result->data = helper(mat, pow)->data;
     return 0;
 
-
+//// 二分优化未完成
 //    int currPow = 1;
 //    struct matrix* temp = NULL;
 //    allocate_matrix(&temp, mat->rows, mat->cols);
