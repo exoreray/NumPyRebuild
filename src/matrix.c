@@ -577,7 +577,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
     while (pow != 0){
         if (pow & 1){
-            mul_matrix(result, result, temp);
+            mul_matrix(result, temp, result);
             ////debug:
             for (int i = 0; i < result->rows; i++) {
                 printf("\n");
