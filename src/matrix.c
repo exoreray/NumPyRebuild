@@ -381,7 +381,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
             }
 
-//// unfinshished here below
             // tail case for  [....],,,   *   [....],,,
             // tail case for  [....]...   *   [....]...
             // tail case for  .........   *   .........
@@ -432,12 +431,28 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
             *(result->data + (i + 1) * result_cols + j + 1) = sum;
         }
+        // tail case for  [,,,,],,,   *   [....]... (only two rows in m1 everytime)
+        // tail case for  [,,,,],,,   *   [....]...
+        // tail case for  .........   *   ,,,,,,,,,
+        for(int j = m2t_rows / 2 * 2; j < m2t_rows; j++)
+        {
+            for (int k = 0; k < m2t_cols; k++)
+            {
+                sum += mat1->data[i * mat1->cols + k] * m2trans[j * m2t_cols + k];
+            }
+            result->data[i * result_cols + j] = sum;
+
+            for (int k = 0; k < m2t_cols; k++)
+            {
+                sum += mat1->data[(i + 1) * mat1->cols + k] * m2trans[j * m2t_cols + k];
+            }
+            result->data[(i + 1) * result_cols + j] = sum;
+        }
     }
 
-    // tail case for  [....]...   *   [....]...
-    // tail case for  [....]...   *   [....]...
+    // tail case for  [....]...   *   [,,,,],,,
+    // tail case for  [....]...   *   [,,,,],,,
     // tail case for  ,,,,,,,,,   *   ,,,,,,,,,
-    // computation:
     #pragma omp parallel for
         for (int i = result_rows / 2 * 2; i < result_rows; i++)
         {
