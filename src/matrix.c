@@ -574,6 +574,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     }
 
     deallocate_matrix(temp);
+    return 0;
 }
 
 /*
