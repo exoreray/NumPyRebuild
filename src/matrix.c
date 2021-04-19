@@ -199,7 +199,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        result->data[i] = mat1->data[i]+mat2->data[i];
 //    }
 //    return 0;
-    int length_floor8 = (mat1->rows)*(mat1->cols) / 16 * 16;
+    int length_floor8 = (mat1->rows)*(mat1->cols) / 8 * 8;
     #pragma omp parallel
     {
         #pragma omp for
