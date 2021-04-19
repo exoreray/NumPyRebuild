@@ -282,21 +282,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    return 0;
 
 //// debug:
-    for (int i = 0; i < mat1->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat1->cols; j++) {
-            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
-        }
-        printf("\n");
-    }
-
-    for (int i = 0; i < mat2->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat2->cols; j++) {
-            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
-        }
-        printf("\n");
-    }
+//    for (int i = 0; i < mat1->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat1->cols; j++) {
+//            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
+//        }
+//        printf("\n");
+//    }
+//
+//    for (int i = 0; i < mat2->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat2->cols; j++) {
+//            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
+//        }
+//        printf("\n");
+//    }
 
 //// parallel solution:
 //  make m2 trans matrix solution:
