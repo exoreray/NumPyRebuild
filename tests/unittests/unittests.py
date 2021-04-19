@@ -143,7 +143,7 @@ class TestPow(TestCase):
 
     def test_small_pow1(self):
         # TODO: YOUR CODE HERE
-        dp_mat, nc_mat = rand_dp_nc_matrix(3, 3, seed=0)
+        dp_mat, nc_mat = rand_dp_nc_matrix(3, 3, high=10, seed=0)
         is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
