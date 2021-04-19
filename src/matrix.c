@@ -371,7 +371,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         {
             __m256d m1m2t = _mm256_set1_pd(0);
             double block[4] = {0, 0, 0, 0};
-            for (int k = 0; k < m2t_cols / 4 * 4; k+=4)
+            for (int k = 0; k < m2t_cols / 4 * 4; k++)
             {
 ////              non simd solution:
 //            for (int k = 0; k < m2t_cols; k++) {
