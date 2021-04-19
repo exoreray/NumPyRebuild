@@ -568,9 +568,9 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         if (pow & 1){
             mul_matrix(result, result, temp);
         }else{
-            pow = pow >> 1;
             square(temp);
         }
+        pow = pow >> 1;
     }
 
     deallocate_matrix(temp);
