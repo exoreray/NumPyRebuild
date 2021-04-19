@@ -213,7 +213,7 @@ class TestPow(TestCase):
         # TODO: YOUR CODE HERE
         pass
         dp_mat, nc_mat = rand_dp_nc_matrix(120, 120, seed=0)
-        is_correct, speed_up = compute([dp_mat, 9], [nc_mat, 9], "pow")
+        is_correct, speed_up = compute([dp_mat, 90], [nc_mat, 90], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
         pass
