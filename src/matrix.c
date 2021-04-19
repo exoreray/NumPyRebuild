@@ -496,6 +496,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         }
         return 0;
     }
+    if (pow == 1){
+        for (int i = 0; i < (result->rows); i++) {
+            for (int j = 0; j < (result->cols); j++) {
+                result->data[i * (result->cols) + j] = mat->data[i * (result->cols) + j];
+            }
+        }
+    }
     if (mat->cols!=mat->rows){
         return -1;
     }

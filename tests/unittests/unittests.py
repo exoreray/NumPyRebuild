@@ -140,14 +140,14 @@ class TestPow(TestCase):
         print_speedup(speed_up)
         pass
 
-    #
-    # def test_small_pow1(self):
-    #     # TODO: YOUR CODE HERE
-    #     dp_mat, nc_mat = rand_dp_nc_matrix(3, 3, seed=0)
-    #     is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
-    #     self.assertTrue(is_correct)
-    #     print_speedup(speed_up)
-    #     pass
+
+    def test_small_pow1(self):
+        # TODO: YOUR CODE HERE
+        dp_mat, nc_mat = rand_dp_nc_matrix(3, 3, seed=0)
+        is_correct, speed_up = compute([dp_mat, 1], [nc_mat, 1], "pow")
+        self.assertTrue(is_correct)
+        print_speedup(speed_up)
+        pass
 
 
     def test_small_pow2(self):
