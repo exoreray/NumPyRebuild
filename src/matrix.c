@@ -436,12 +436,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         // tail case for  .........   *   ,,,,,,,,,
         for(int j = m2t_rows / 2 * 2; j < m2t_rows; j++)
         {
+            double sum = 0;
             for (int k = 0; k < m2t_cols; k++)
             {
-                double sum += mat1->data[i * mat1->cols + k] * m2trans[j * m2t_cols + k];
+                sum += mat1->data[i * mat1->cols + k] * m2trans[j * m2t_cols + k];
             }
             result->data[i * result_cols + j] = sum;
 
+            sum = 0;
             for (int k = 0; k < m2t_cols; k++)
             {
                 sum += mat1->data[(i + 1) * mat1->cols + k] * m2trans[j * m2t_cols + k];
