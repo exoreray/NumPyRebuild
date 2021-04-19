@@ -282,21 +282,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //    return 0;
 
 //// debug:
-//    for (int i = 0; i < mat1->rows; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat1->cols; j++) {
-//            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
-//        }
-//        printf("\n");
-//    }
-//
-//    for (int i = 0; i < mat2->rows; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->cols; j++) {
-//            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
-//        }
-//        printf("\n");
-//    }
+    for (int i = 0; i < mat1->rows; i++) {
+        printf("\n");
+        for (int j = 0; j < mat1->cols; j++) {
+            printf("%lf,", mat1->data[(i * mat1->cols) + j]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < mat2->rows; i++) {
+        printf("\n");
+        for (int j = 0; j < mat2->cols; j++) {
+            printf("%lf,", mat2->data[(i * mat2->cols) + j]);
+        }
+        printf("\n");
+    }
 
 //// parallel solution:
 //  make m2 trans matrix solution:
@@ -354,13 +354,13 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
 ////debug:
-//    for (int i = 0; i < mat2->cols; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->rows; j++) {
-//    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
-//    	}
-//    	printf("\n");
-//    }
+    for (int i = 0; i < mat2->cols; i++) {
+        printf("\n");
+        for (int j = 0; j < mat2->rows; j++) {
+    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
+    	}
+    	printf("\n");
+    }
 
 
 // computation:
@@ -382,6 +382,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             double block[4] = {0, 0, 0, 0};
             _mm256_storeu_pd(block,m1m2t);
             double sum = block[0] + block[1] + block[2] + block[3];
+            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
+
             // tail case for  [][][][]..  *   [][][][]..
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
