@@ -386,7 +386,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             // tail case for  [....]...   *   [....]...
             // tail case for  .........   *   .........
             _mm256_storeu_pd(temp_block,m1m2t_upperleft);
-            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
+            double sum = 0;
+            sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
@@ -398,7 +399,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             // tail case for  [....]...   *   [....],,,
             // tail case for  .........   *   .........
             _mm256_storeu_pd(temp_block,m1m2t_upperright);
-            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
+            sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
@@ -410,7 +411,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             // tail case for  [....],,,   *   [....]...
             // tail case for  .........   *   .........
             _mm256_storeu_pd(temp_block,m1m2t_lowerleft);
-            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
+            sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
@@ -422,7 +423,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             // tail case for  [....],,,   *   [....],,,
             // tail case for  .........   *   .........
             _mm256_storeu_pd(temp_block,m1m2t_lowerright);
-            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
+            sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
@@ -451,7 +452,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
                 }
                 _mm256_storeu_pd(block,m1m2t);
-                double sum = block[0] + block[1] + block[2] + block[3];
+                sum = block[0] + block[1] + block[2] + block[3];
 
                 // tail case for  [][][][]..  *   [][][][]..
                 for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
@@ -464,7 +465,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
 
     return 0;
-    
+
 }
 
 /*
