@@ -364,7 +364,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
 // computation:
-#pragma omp parallel for
+//#pragma omp parallel for
     for (int i = 0; i < result_rows; i++)
     {
         for (int j = 0; j < m2t_rows; j++)
