@@ -199,21 +199,39 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //        result->data[i] = mat1->data[i]+mat2->data[i];
 //    }
 //    return 0;
-    int length_floor8 = (mat1->rows)*(mat1->cols) / 8 * 8;
-    #pragma omp parallel
+    int length_floor16 = (mat1->rows)*(mat1->cols) / 32 * 32;
+#pragma omp parallel
     {
-        #pragma omp for
-        for(unsigned int i = 0; i < length_floor8; i += 8) {
-            __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
-            __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
-            __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
-            __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
-            _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, m2));
-            _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m3, m4));
+#pragma omp for
+        for(unsigned int i = 0; i < length_floor16; i += 32) {
+            _mm256_storeu_pd(result->data + i, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 4), _mm256_loadu_pd(mat2->data + i + 4)));
+            _mm256_storeu_pd(result->data + i + 8, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 8), _mm256_loadu_pd(mat2->data + i + 8)));
+            _mm256_storeu_pd(result->data + i + 12, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 12), _mm256_loadu_pd(mat2->data + i + 12)));
+            _mm256_storeu_pd(result->data + i + 16, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 16), _mm256_loadu_pd(mat2->data + i + 16)));
+            _mm256_storeu_pd(result->data + i + 20, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 20), _mm256_loadu_pd(mat2->data + i + 20)));
+            _mm256_storeu_pd(result->data + i + 24, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 24), _mm256_loadu_pd(mat2->data + i + 24)));
+            _mm256_storeu_pd(result->data + i + 28, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 28), _mm256_loadu_pd(mat2->data + i + 28)));
         }
     }
-//    #pragma omp for
-    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 32 * 32; i < (mat1->rows)*(mat1->cols) / 16 * 16; i+=16) {
+        _mm256_storeu_pd(result->data + i, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+        _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 4), _mm256_loadu_pd(mat2->data + i + 4)));
+        _mm256_storeu_pd(result->data + i + 8, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 8), _mm256_loadu_pd(mat2->data + i + 8)));
+        _mm256_storeu_pd(result->data + i + 12, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 12), _mm256_loadu_pd(mat2->data + i + 12)));
+    }
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 16 * 16; i < (mat1->rows)*(mat1->cols) / 8 * 8; i+=8) {
+        _mm256_storeu_pd(result->data + i, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+        _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i + 4), _mm256_loadu_pd(mat2->data + i + 4)));
+    }
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols) / 4 * 4; i+=4) {
+        _mm256_storeu_pd(result->data + i, _mm256_add_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+    }
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i+=1) {
         result->data[i] = mat1->data[i] + mat2->data[i];
     }
     return 0;
