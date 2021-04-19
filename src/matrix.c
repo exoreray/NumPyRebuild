@@ -550,13 +550,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
 
 ////debug:
-    for (int i = 0; i < mat->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat->cols; j++) {
-    		printf("%lf,", mat->data[(i * mat->cols) + j]);
-    	}
-    	printf("\n");
-    }
+//    for (int i = 0; i < mat->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat->cols; j++) {
+//    		printf("%lf,", mat->data[(i * mat->cols) + j]);
+//    	}
+//    	printf("\n");
+//    }
 
 // init result to identity matrix
     for (int i = 0; i < (result->rows); i++) {
@@ -579,26 +579,26 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         if (pow & 1){
             mul_matrix(result, temp, result);
             ////debug:
-            for (int i = 0; i < result->rows; i++) {
-                printf("\n");
-                for (int j = 0; j < result->cols; j++) {
-                    printf("%lf,", result->data[(i * mat->cols) + j]);
-                }
-                printf("\n");
-            }
+//            for (int i = 0; i < result->rows; i++) {
+//                printf("\n");
+//                for (int j = 0; j < result->cols; j++) {
+//                    printf("%lf,", result->data[(i * mat->cols) + j]);
+//                }
+//                printf("\n");
+//            }
         }
         square(temp);
 
         ////debug:
-        printf("squared\n");
-
-        for (int i = 0; i < temp->rows; i++) {
-            printf("\n");
-            for (int j = 0; j < temp->cols; j++) {
-                printf("%lf,", temp->data[(i * mat->cols) + j]);
-            }
-            printf("\n");
-        }
+//        printf("squared\n");
+//
+//        for (int i = 0; i < temp->rows; i++) {
+//            printf("\n");
+//            for (int j = 0; j < temp->cols; j++) {
+//                printf("%lf,", temp->data[(i * mat->cols) + j]);
+//            }
+//            printf("\n");
+//        }
 
         pow = pow >> 1;
     }
