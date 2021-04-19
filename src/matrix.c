@@ -365,11 +365,14 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 // computation:
 #pragma omp parallel for
-    for (int i = 0; i < result_rows; i++) {
-        for (int j = 0; j < m2t_rows; j++) {
+    for (int i = 0; i < result_rows; i++)
+    {
+        for (int j = 0; j < m2t_rows; j++)
+        {
             __m256d m1m2t = _mm256_set1_pd(0);
             double block[4] = {0, 0, 0, 0};
-            for (int k = 0; k < m2t_cols / 4 * 4; k+=4) {
+            for (int k = 0; k < m2t_cols / 4 * 4; k+=4)
+            {
 ////              non simd solution:
 //            for (int k = 0; k < m2t_cols; k++) {
 //                result->data[i * result_cols + j] +=
