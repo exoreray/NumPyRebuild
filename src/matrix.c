@@ -502,6 +502,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
                 result->data[i * (result->cols) + j] = mat->data[i * (result->cols) + j];
             }
         }
+        return 0;
     }
     if (mat->cols!=mat->rows){
         return -1;
