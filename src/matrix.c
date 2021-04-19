@@ -469,21 +469,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
 
-//solution 1:
-struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
-    if (pow == 1){
-        return mat;
-    }
-    struct matrix* temp = NULL;
-    allocate_matrix(&temp, mat->rows, mat->cols);
-    struct matrix* preTemp;
-    preTemp = helper(mat, pow-1);
-    mul_matrix(temp, mat, preTemp);
-    if (pow > 2){
-        deallocate_matrix(preTemp);
-    }
-    return temp;
-}
+////solution 1 for pow:
+//struct matrix* helper(matrix *mat, int pow){ // recursion will have performance issue with large power.
+//    if (pow == 1){
+//        return mat;
+//    }
+//    struct matrix* temp = NULL;
+//    allocate_matrix(&temp, mat->rows, mat->cols);
+//    struct matrix* preTemp;
+//    preTemp = helper(mat, pow-1);
+//    mul_matrix(temp, mat, preTemp);
+//    if (pow > 2){
+//        deallocate_matrix(preTemp);
+//    }
+//    return temp;
+//}
 
 //// pow helper:
 int square(struct matrix *mat){
@@ -493,6 +493,7 @@ int square(struct matrix *mat){
     free(mat->data);
     mat->data = temp->data;
 //    deallocate_matrix(temp);
+    temp = NULL;
     return 0;
 }
 
