@@ -212,7 +212,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m3, m4));
         }
     }
-    #pragma omp for
+//    #pragma omp for
     for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
         result->data[i] = mat1->data[i] + mat2->data[i];
     }
