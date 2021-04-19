@@ -398,7 +398,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
 
 ////debug:
-            // debug:
             for (int i = 0; i < mat1->rows; i++) {
                 printf("\n");
                 for (int j = 0; j < mat2->cols; j++) {
@@ -414,12 +413,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 sum += (*(mat1->data + i * mat1->cols + k)) * m2trans[j * m2t_cols + k];
             }
             *(result->data + i * result_cols + j) = sum;
+            ////debug:
+            for (int i = 0; i < mat1->rows; i++) {
+                printf("\n");
+                for (int j = 0; j < mat2->cols; j++) {
+                    printf("%lf,", result->data[(i * mat2->cols) + j]);
+                }
+                printf("\n");
+            }
 
 
 
         }
     }
-// debug:
+//// debug:
     for (int i = 0; i < mat1->rows; i++) {
         printf("\n");
         for (int j = 0; j < mat2->cols; j++) {
