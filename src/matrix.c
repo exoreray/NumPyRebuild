@@ -335,16 +335,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
 
-////debug:
-//    for (int i = 0; i < mat2->cols; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->rows; j++) {
-//            printf("%lf,", m2trans[(i * m2t_cols) + j]);
-//        }
-//        printf("\n");
-//    }
-//    printf("\n");
-//    printf("\n");
 
     // tail case
     for (int i = 0; i < mat2->rows / 4 * 4; i++) {
@@ -357,108 +347,124 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             *(m2trans + (m2t_cols * j) + i) = *(mat2->data + (mat2->cols * i) + j);
         }
     }
-////debug:
-//    for (int i = 0; i < mat2->cols; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->rows; j++) {
-//    		printf("%lf,", m2trans[(i * m2t_cols) + j]);
-//    	}
-//    	printf("\n");
-//    }
 
 
 // computation:
 #pragma omp parallel for
-    for (int i = 0; i < result_rows; i++)
+    for (int i = 0; i < result_rows / 2 * 2; i+=2)
     {
-        for (int j = 0; j < m2t_rows; j++)
+        for (int j = 0; j < m2t_rows / 2 * 2; j+=2)
         {
-            __m256d m1m2t = _mm256_set1_pd(0);
-            double block[4] = {0, 0, 0, 0};
+            __m256d m1m2t_upperleft = _mm256_set1_pd(0);
+            __m256d m1m2t_upperright = _mm256_set1_pd(0);
+            __m256d m1m2t_lowerleft = _mm256_set1_pd(0);
+            __m256d m1m2t_lowerright = _mm256_set1_pd(0);
+            double temp_block[4] = {0, 0, 0, 0};
             for (int k = 0; k < m2t_cols / 4 * 4; k+=4)
             {
-                
 ////              non simd solution:
 //            for (int k = 0; k < m2t_cols; k++) {
 //                result->data[i * result_cols + j] +=
 //                        mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->rows) + k];
-////              debug:
-//                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
-//                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->rows) + k);
-                __m256d m1 = _mm256_loadu_pd(mat1->data + i * mat1->cols + k);
-//                double b1[4] = {0, 0, 0, 0};
-//                _mm256_storeu_pd(b1,m1);
-//                printf("m1 block: %lf, %lf, %lf, %lf, \n", b1[0], b1[1], b1[2], b1[3]);
-                __m256d m2t = _mm256_loadu_pd(m2trans + j * mat1->cols + k);
-//                double b2[4] = {0, 0, 0, 0};
-//                _mm256_storeu_pd(b2,m2t);
-//                printf("m2t block: %lf, %lf, %lf, %lf, \n", b2[0], b2[1], b2[2], b2[3]);
-                m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
-                ////debug:
-//                _mm256_storeu_pd(block,m1m2t);
-//                printf("block sum: %lf, %lf, %lf, %lf, k: %d\n", block[0], block[1], block[2], block[3], k);
+
+//// [....]....   *   [....]....
+//// [....]....       [....]....
+//// ..........       ..........
+                __m256d m1_upper = _mm256_loadu_pd(mat1->data + i * mat1->cols + k);
+                __m256d m1_lower = _mm256_loadu_pd(mat1->data + (i + 1) * mat1->cols + k);
+                __m256d m2t_upper = _mm256_loadu_pd(m2trans + j * mat1->cols + k);
+                __m256d m2t_lower = _mm256_loadu_pd(m2trans + (j + 1) * mat1->cols + k);
+                m1m2t_upperleft = _mm256_add_pd(m1m2t_upperleft, _mm256_mul_pd(m1_upper, m2t_upper));
+                m1m2t_upperright = _mm256_add_pd(m1m2t_upperright, _mm256_mul_pd(m1_upper, m2t_lower));
+                m1m2t_lowerleft = _mm256_add_pd(m1m2t_lowerleft, _mm256_mul_pd(m1_lower, m2t_upper));
+                m1m2t_lowerright = _mm256_add_pd(m1m2t_lowerright, _mm256_mul_pd(m1_lower, m2t_lower));
 
             }
-            _mm256_storeu_pd(block,m1m2t);
-            double sum = block[0] + block[1] + block[2] + block[3];
-//            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
 
-////debug:
-//            for (int i = 0; i < mat1->rows; i++) {
-//                printf("\n");
-//                for (int j = 0; j < mat2->cols; j++) {
-//                    printf("%lf,", result->data[(i * mat2->cols) + j]);
-//                }
-//                printf("\n");
-//            }
+//// unfinshished here below
+            // tail case for  [....],,,   *   [....],,,
+            // tail case for  [....]...   *   [....]...
+            // tail case for  .........   *   .........
+            _mm256_storeu_pd(temp_block,m1m2t_upperleft);
+            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
-
-            // tail case for  [][][][]..  *   [][][][]..
             for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
             {
-                sum += (*(mat1->data + i * mat1->cols + k)) * m2trans[j * m2t_cols + k];
+                sum += mat1->data[i * mat1->cols + k] * m2trans[j * m2t_cols + k];
             }
             *(result->data + i * result_cols + j) = sum;
 
+            // tail case for  [....],,,   *   [....]...
+            // tail case for  [....]...   *   [....],,,
+            // tail case for  .........   *   .........
+            _mm256_storeu_pd(temp_block,m1m2t_upperright);
+            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
-            ////debug:
-//            for (int i = 0; i < mat1->rows; i++) {
-//                printf("\n");
-//                for (int j = 0; j < mat2->cols; j++) {
-//                    printf("%lf,", result->data[(i * mat2->cols) + j]);
-//                }
-//                printf("\n");
-//            }
+            for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
+            {
+                sum += mat1->data[i * mat1->cols + k] * m2trans[(j + 1) * m2t_cols + k];
+            }
+            *(result->data + i * result_cols + j + 1) = sum;
 
+            // tail case for  [....]...   *   [....],,,
+            // tail case for  [....],,,   *   [....]...
+            // tail case for  .........   *   .........
+            _mm256_storeu_pd(temp_block,m1m2t_lowerleft);
+            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
 
+            for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
+            {
+                sum += mat1->data[(i + 1) * mat1->cols + k] * m2trans[j * m2t_cols + k];
+            }
+            *(result->data + (i + 1) * result_cols + j) = sum;
 
+            // tail case for  [....]...   *   [....]...
+            // tail case for  [....],,,   *   [....],,,
+            // tail case for  .........   *   .........
+            _mm256_storeu_pd(temp_block,m1m2t_lowerright);
+            double sum = temp_block[0] + temp_block[1] + temp_block[2] + temp_block[3];
+
+            for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
+            {
+                sum += mat1->data[(i + 1) * mat1->cols + k] * m2trans[(j + 1) * m2t_cols + k];
+            }
+
+            *(result->data + (i + 1) * result_cols + j + 1) = sum;
         }
     }
-//// debug:
-//    for (int i = 0; i < mat1->rows; i++) {
-//        printf("\n");
-//        for (int j = 0; j < mat2->cols; j++) {
-//            printf("%lf,", result->data[(i * mat2->cols) + j]);
-//        }
-//        printf("\n");
-//    }
+
+    // tail case for  [....]...   *   [....]...
+    // tail case for  [....]...   *   [....]...
+    // tail case for  ,,,,,,,,,   *   ,,,,,,,,,
+    // computation:
+    #pragma omp parallel for
+        for (int i = result_rows / 2 * 2; i < result_rows; i++)
+        {
+            for (int j = 0; j < m2t_rows; j++)
+            {
+                __m256d m1m2t = _mm256_set1_pd(0);
+                double block[4] = {0, 0, 0, 0};
+                for (int k = 0; k < m2t_cols / 4 * 4; k+=4)
+                {
+                    __m256d m1 = _mm256_loadu_pd(mat1->data + i * mat1->cols + k);
+                    __m256d m2t = _mm256_loadu_pd(m2trans + j * mat1->cols + k);
+                    m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
+                }
+                _mm256_storeu_pd(block,m1m2t);
+                double sum = block[0] + block[1] + block[2] + block[3];
+
+                // tail case for  [][][][]..  *   [][][][]..
+                for (int k = m2t_cols / 4 * 4; k < m2t_cols; k++)
+                {
+                    sum += (*(mat1->data + i * mat1->cols + k)) * m2trans[j * m2t_cols + k];
+                }
+                *(result->data + i * result_cols + j) = sum;
+
+            }
+        }
 
     return 0;
-
-////  no transpose solution:
-//    for (int i = 0; i < mat2->rows / 4 * 4; i += 4){
-//        for (int j = 0; j < mat1->rows; j += 1) {
-//            for (int k = 0; k < mat2->cols; k += 1) {
-//            double* data0 = *(mat2->data) + (i + 0) * mat2->cols;
-//            double* data1 = *(mat2->data) + (i + 1) * mat2->cols;
-//            double* data2 = *(mat2->data) + (i + 2) * mat2->cols;
-//            double* data3 = *(mat2->data) + (i + 3) * mat2->cols;
-//            block0 = _mm256_set_pd(*(data0 + k), *(data1 + k), *(data2 + k), *(data3 + k));
-//            _mm256_storeu_pd(result + (j + 0) * result->cols + i, block1);
-//            }
-//        }
-//    }
-
+    
 }
 
 /*
