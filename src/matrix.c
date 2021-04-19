@@ -553,7 +553,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     for (int i = 0; i < mat->rows; i++) {
         printf("\n");
         for (int j = 0; j < mat->cols; j++) {
-    		printf("%lf,", m2trans[(i * mat->cols) + j]);
+    		printf("%lf,", mat->data[(i * mat->cols) + j]);
     	}
     	printf("\n");
     }
