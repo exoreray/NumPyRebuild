@@ -247,7 +247,24 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(result->data + i + 28, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i + 28), _mm256_loadu_pd(mat2->data + i + 28)));
         }
     }
-    for (int i = (mat1->rows)*(mat1->cols) / 32 * 32; i < (mat1->rows)*(mat1->cols); i++) {
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 32 * 32; i < (mat1->rows)*(mat1->cols) / 16 * 16; i+=16) {
+        _mm256_storeu_pd(result->data + i, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+        _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i + 4), _mm256_loadu_pd(mat2->data + i + 4)));
+        _mm256_storeu_pd(result->data + i + 8, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i + 8), _mm256_loadu_pd(mat2->data + i + 8)));
+        _mm256_storeu_pd(result->data + i + 12, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i + 12), _mm256_loadu_pd(mat2->data + i + 12)));
+    }
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 16 * 16; i < (mat1->rows)*(mat1->cols) / 8 * 8; i+=8) {
+        _mm256_storeu_pd(result->data + i, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+        _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i + 4), _mm256_loadu_pd(mat2->data + i + 4)));
+    }
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols) / 4 * 4; i+=4) {
+        _mm256_storeu_pd(result->data + i, _mm256_sub_pd(_mm256_loadu_pd(mat1->data + i), _mm256_loadu_pd(mat2->data + i)));
+    }
+#pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 4 * 4; i < (mat1->rows)*(mat1->cols); i+=1) {
         result->data[i] = mat1->data[i] - mat2->data[i];
     }
     return 0;
