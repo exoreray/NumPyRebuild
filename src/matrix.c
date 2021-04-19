@@ -485,6 +485,17 @@ struct matrix* helper(matrix *mat, int pow){ // recursion will have performance 
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
 //    solution 1:
+    if (pow == 0){
+        for (int i = 0; i < (result->rows); i++) {
+            for (int j = 0; j < (result->cols); j++) {
+                result->data[i * (result->cols) + j] = 0;
+            }
+        }
+        for (int i = 0; i < (result->rows); i++) {
+            result->data[i * result->cols + i] = 1;
+        }
+        return 0;
+    }
     if (mat->cols!=mat->rows){
         return -1;
     }
