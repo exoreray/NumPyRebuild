@@ -578,9 +578,28 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     while (pow != 0){
         if (pow & 1){
             mul_matrix(result, result, temp);
-        }else{
-            square(temp);
+            ////debug:
+            for (int i = 0; i < result->rows; i++) {
+                printf("\n");
+                for (int j = 0; j < result->cols; j++) {
+                    printf("%lf,", result->data[(i * mat->cols) + j]);
+                }
+                printf("\n");
+            }
         }
+        square(temp);
+
+        ////debug:
+        printf("squared\n");
+
+        for (int i = 0; i < temp->rows; i++) {
+            printf("\n");
+            for (int j = 0; j < temp->cols; j++) {
+                printf("%lf,", temp->data[(i * mat->cols) + j]);
+            }
+            printf("\n");
+        }
+
         pow = pow >> 1;
     }
 
