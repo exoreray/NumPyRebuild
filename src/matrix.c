@@ -492,7 +492,7 @@ int square(struct matrix *mat){
     mul_matrix(temp, mat, mat);
     free(mat->data);
     mat->data = temp->data;
-    deallocate_matrix(temp);
+//    deallocate_matrix(temp);
     return 0;
 }
 
@@ -556,7 +556,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         pow = pow >> 1;
     }
 
-//    deallocate_matrix(temp);
+    deallocate_matrix(temp);
     return 0;
 }
 
