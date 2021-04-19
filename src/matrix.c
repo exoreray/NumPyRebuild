@@ -368,25 +368,18 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     for (int i = 0; i < result_rows; i++) {
         for (int j = 0; j < m2t_rows; j++) {
             __m256d m1m2t = _mm256_set1_pd(0);
-            double testm1[4] = {0, 0, 0, 0};
-            double testm2t[4] = {0, 0, 0, 0};
             for (int k = 0; k < m2t_cols / 4 * 4; k+=4) {
 ////              non simd solution:
+//            for (int k = 0; k < m2t_cols; k++) {
 //                result->data[i * result_cols + j] +=
 //                        mat1->data[i * (mat1->cols) + k] * m2trans[j * (mat2->rows) + k];
 ////              debug:
 //                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
 //                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->rows) + k);
                 __m256d m1 = _mm256_loadu_pd(mat1->data + i * mat1->cols + k);
-
                 __m256d m2t = _mm256_loadu_pd(m2trans + i * mat1->cols + k);
-
-                __m256d m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
-                _mm256_storeu_pd(testm1,m1);
-                _mm256_storeu_pd(testm2t,m2t);
+                m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
             }
-            printf("m1 : %lf, %lf, %lf, %lf, ", testm1[0], testm1[1], testm1[2], testm1[3]);
-            printf("block sum: %lf, %lf, %lf, %lf, ", testm2t[0], testm2t[1], testm2t[2], testm2t[3]);
             double block[4] = {0, 0, 0, 0};
             _mm256_storeu_pd(block,m1m2t);
             double sum = block[0] + block[1] + block[2] + block[3];
