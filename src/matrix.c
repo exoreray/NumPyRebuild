@@ -528,24 +528,41 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 ////halving solution:
     struct matrix* temp;
     allocate_matrix(&temp, mat->rows, mat->cols);
-    if (pow == 0){
-        for (int i = 0; i < (result->rows); i++) {
-            for (int j = 0; j < (result->cols); j++) {
-                result->data[i * (result->cols) + j] = 0;
-            }
+//    if (pow == 0){
+//        for (int i = 0; i < (result->rows); i++) {
+//            for (int j = 0; j < (result->cols); j++) {
+//                result->data[i * (result->cols) + j] = 0;
+//            }
+//        }
+//        for (int i = 0; i < (result->rows); i++) {
+//            result->data[i * result->cols + i] = 1;
+//        }
+//        return 0;
+//    }
+//    if (pow == 1){
+//        for (int i = 0; i < (result->rows); i++) {
+//            for (int j = 0; j < (result->cols); j++) {
+//                result->data[i * (result->cols) + j] = mat->data[i * (result->cols) + j];
+//            }
+//        }
+//        return 0;
+//    }
+
+// init result to identity matrix
+    for (int i = 0; i < (result->rows); i++) {
+        for (int j = 0; j < (result->cols); j++) {
+            result->data[i * (result->cols) + j] = 0;
         }
-        for (int i = 0; i < (result->rows); i++) {
-            result->data[i * result->cols + i] = 1;
-        }
-        return 0;
     }
-    if (pow == 1){
-        for (int i = 0; i < (result->rows); i++) {
-            for (int j = 0; j < (result->cols); j++) {
-                result->data[i * (result->cols) + j] = mat->data[i * (result->cols) + j];
-            }
+    for (int i = 0; i < (result->rows); i++) {
+        result->data[i * result->cols + i] = 1;
+    }
+
+    // init temp = mat
+    for (int i = 0; i < (temp->rows); i++) {
+        for (int j = 0; j < (temp->cols); j++) {
+            temp->data[i * (temp->cols) + j] = mat->data[i * (mat->cols) + j];
         }
-        return 0;
     }
 
     while (pow != 0){
