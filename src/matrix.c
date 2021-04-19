@@ -384,7 +384,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 double b1[4] = {0, 0, 0, 0};
                 _mm256_storeu_pd(b1,m1);
                 printf("m1 block: %lf, %lf, %lf, %lf, \n", b1[0], b1[1], b1[2], b1[3]);
-                __m256d m2t = _mm256_loadu_pd(m2trans + i * mat1->cols + k);
+                __m256d m2t = _mm256_loadu_pd(m2trans + j * mat1->cols + k);
                 double b2[4] = {0, 0, 0, 0};
                 _mm256_storeu_pd(b2,m2t);
                 printf("m2t block: %lf, %lf, %lf, %lf, \n", b2[0], b2[1], b2[2], b2[3]);
