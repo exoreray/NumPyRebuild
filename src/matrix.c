@@ -543,7 +543,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
 ////halving solution:
     struct matrix* temp;
-    allocate_matrix(&temp, n, n);
+    allocate_matrix(&temp, mat->rows, mat->cols);
     if (pow == 0){
         for (int i = 0; i < (result->rows); i++) {
             for (int j = 0; j < (result->cols); j++) {
