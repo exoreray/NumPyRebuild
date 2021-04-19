@@ -364,7 +364,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
 
 // computation:
-#pragma omp parallel for
+//#pragma omp parallel for
     for (int i = 0; i < result_rows; i++)
     {
         for (int j = 0; j < m2t_rows; j++)
@@ -381,21 +381,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //                printf("result[%d] += mat1[%d] * m2trans[%d]\n",
 //                       i * result_cols + j, i * (mat1->cols) + k, j * (mat2->rows) + k);
                 __m256d m1 = _mm256_loadu_pd(mat1->data + i * mat1->cols + k);
-                double b1[4] = {0, 0, 0, 0};
-                _mm256_storeu_pd(b1,m1);
-                printf("m1 block: %lf, %lf, %lf, %lf, \n", b1[0], b1[1], b1[2], b1[3]);
+//                double b1[4] = {0, 0, 0, 0};
+//                _mm256_storeu_pd(b1,m1);
+//                printf("m1 block: %lf, %lf, %lf, %lf, \n", b1[0], b1[1], b1[2], b1[3]);
                 __m256d m2t = _mm256_loadu_pd(m2trans + j * mat1->cols + k);
-                double b2[4] = {0, 0, 0, 0};
-                _mm256_storeu_pd(b2,m2t);
-                printf("m2t block: %lf, %lf, %lf, %lf, \n", b2[0], b2[1], b2[2], b2[3]);
+//                double b2[4] = {0, 0, 0, 0};
+//                _mm256_storeu_pd(b2,m2t);
+//                printf("m2t block: %lf, %lf, %lf, %lf, \n", b2[0], b2[1], b2[2], b2[3]);
                 m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
                 _mm256_storeu_pd(block,m1m2t);
                 printf("block sum: %lf, %lf, %lf, %lf, k: %d\n", block[0], block[1], block[2], block[3], k);
 
             }
-//            _mm256_storeu_pd(block,m1m2t);
+            _mm256_storeu_pd(block,m1m2t);
             double sum = block[0] + block[1] + block[2] + block[3];
-//            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
+            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
 
 ////debug:
             for (int i = 0; i < mat1->rows; i++) {
