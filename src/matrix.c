@@ -389,22 +389,23 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 //                _mm256_storeu_pd(b2,m2t);
 //                printf("m2t block: %lf, %lf, %lf, %lf, \n", b2[0], b2[1], b2[2], b2[3]);
                 m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
-                _mm256_storeu_pd(block,m1m2t);
-                printf("block sum: %lf, %lf, %lf, %lf, k: %d\n", block[0], block[1], block[2], block[3], k);
+                ////debug:
+//                _mm256_storeu_pd(block,m1m2t);
+//                printf("block sum: %lf, %lf, %lf, %lf, k: %d\n", block[0], block[1], block[2], block[3], k);
 
             }
             _mm256_storeu_pd(block,m1m2t);
             double sum = block[0] + block[1] + block[2] + block[3];
-            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
+//            printf("block sum: %lf, %lf, %lf, %lf, ", block[0], block[1], block[2], block[3]);
 
 ////debug:
-            for (int i = 0; i < mat1->rows; i++) {
-                printf("\n");
-                for (int j = 0; j < mat2->cols; j++) {
-                    printf("%lf,", result->data[(i * mat2->cols) + j]);
-                }
-                printf("\n");
-            }
+//            for (int i = 0; i < mat1->rows; i++) {
+//                printf("\n");
+//                for (int j = 0; j < mat2->cols; j++) {
+//                    printf("%lf,", result->data[(i * mat2->cols) + j]);
+//                }
+//                printf("\n");
+//            }
 
 
             // tail case for  [][][][]..  *   [][][][]..
@@ -427,13 +428,13 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
 //// debug:
-    for (int i = 0; i < mat1->rows; i++) {
-        printf("\n");
-        for (int j = 0; j < mat2->cols; j++) {
-            printf("%lf,", result->data[(i * mat2->cols) + j]);
-        }
-        printf("\n");
-    }
+//    for (int i = 0; i < mat1->rows; i++) {
+//        printf("\n");
+//        for (int j = 0; j < mat2->cols; j++) {
+//            printf("%lf,", result->data[(i * mat2->cols) + j]);
+//        }
+//        printf("\n");
+//    }
 
     return 0;
 
