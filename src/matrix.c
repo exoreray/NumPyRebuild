@@ -368,6 +368,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     for (int i = 0; i < result_rows; i++) {
         for (int j = 0; j < m2t_rows; j++) {
             __m256d m1m2t = _mm256_set1_pd(0);
+            double testm1[4] = {0, 0, 0, 0};
+            double testm2t[4] = {0, 0, 0, 0};
             for (int k = 0; k < m2t_cols / 4 * 4; k+=4) {
 ////              non simd solution:
 //                result->data[i * result_cols + j] +=
@@ -380,9 +382,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 __m256d m2t = _mm256_loadu_pd(m2trans + i * mat1->cols + k);
 
                 __m256d m1m2t = _mm256_add_pd(m1m2t, _mm256_mul_pd(m1, m2t));
-                double testm1[4] = {0, 0, 0, 0};
                 _mm256_storeu_pd(testm1,m1);
-                double testm2t[4] = {0, 0, 0, 0};
                 _mm256_storeu_pd(testm2t,m2t);
             }
             printf("m1 : %lf, %lf, %lf, %lf, ", testm1[0], testm1[1], testm1[2], testm1[3]);
