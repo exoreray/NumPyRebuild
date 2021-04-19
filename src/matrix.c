@@ -438,7 +438,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         {
             for (int k = 0; k < m2t_cols; k++)
             {
-                sum += mat1->data[i * mat1->cols + k] * m2trans[j * m2t_cols + k];
+                double sum += mat1->data[i * mat1->cols + k] * m2trans[j * m2t_cols + k];
             }
             result->data[i * result_cols + j] = sum;
 
