@@ -209,8 +209,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     for (int i = size8; i < size4; i+=4)
     {
-        __m256d a1 = _mm256_loadu_pd(mat1->data + i);
-        __m256d b1 = _mm256_loadu_pd(mat2->data + i);
+        __m256d m1 = _mm256_loadu_pd(mat1->data + i);
+        __m256d n1 = _mm256_loadu_pd(mat2->data + i);
         _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, n1));
     }
 
@@ -252,8 +252,8 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     for (int i = size8; i < size4; i+=4)
     {
-        __m256d a1 = _mm256_loadu_pd(mat1->data + i);
-        __m256d b1 = _mm256_loadu_pd(mat2->data + i);
+        __m256d m1 = _mm256_loadu_pd(mat1->data + i);
+        __m256d n1 = _mm256_loadu_pd(mat2->data + i);
         _mm256_storeu_pd(result->data + i, _mm256_sub_pd(m1, n1));
     }
 
