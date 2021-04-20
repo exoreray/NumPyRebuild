@@ -262,7 +262,6 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     return 0;
 }
-}
 
 /*
  * Store the result of multiplying mat1 and mat2 to `result`.
