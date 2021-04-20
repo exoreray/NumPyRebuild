@@ -220,7 +220,6 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(result->data + i + 24, m7);
             _mm256_storeu_pd(result->data + i + 28, m8);
         }
-    }
 #pragma omp for
     for (int i = length_floor16; i < (mat1->rows)*(mat1->cols) / 16 * 16; i+=16)
     {
@@ -281,7 +280,6 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         _mm256_storeu_pd(result->data + i + 24, m7);
         _mm256_storeu_pd(result->data + i + 28, m8);
     }
-}
 #pragma omp for
     for (int i = length_floor16; i < (mat1->rows)*(mat1->cols) / 16 * 16; i+=16)
     {
