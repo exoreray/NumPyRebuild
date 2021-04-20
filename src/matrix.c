@@ -217,7 +217,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 #pragma omp for
     for (int i = length_floor16; i < (mat1->rows)*(mat1->cols) / 4 * 4; i+=4)
     {
-        __m256d n1 = _mm256_loadu_pd(mat1->data + ii);
+        __m256d n1 = _mm256_loadu_pd(mat1->data + i);
         __m256d n2 = _mm256_loadu_pd(mat2->data + i);
         _mm256_storeu_pd(result->data+i, _mm256_add_pd(n1, n2));
     }
