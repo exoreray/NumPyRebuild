@@ -205,6 +205,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         _mm256_storeu_pd(result->data + i, _mm256_add_pd(a1, b1));
         _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(a2, b2));
     }
+#pragma omp parallel for
 
     for (int i = size8; i < size4; i+=4)
     {
@@ -247,6 +248,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         _mm256_storeu_pd(result->data + i, _mm256_sub_pd(a1, b1));
         _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(a2, b2));
     }
+#pragma omp parallel for
 
     for (int i = size8; i < size4; i+=4)
     {
