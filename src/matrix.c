@@ -594,16 +594,19 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 //    }
 
 // init result to identity matrix
+#pragma omp parallel for
     for (int i = 0; i < (result->rows); i++) {
         for (int j = 0; j < (result->cols); j++) {
             result->data[i * (result->cols) + j] = 0;
         }
     }
+#pragma omp parallel for
     for (int i = 0; i < (result->rows); i++) {
         result->data[i * result->cols + i] = 1;
     }
 
     // init temp = mat
+#pragma omp parallel for
     for (int i = 0; i < (temp->rows); i++) {
         for (int j = 0; j < (temp->cols); j++) {
             temp->data[i * (temp->cols) + j] = mat->data[i * (mat->cols) + j];
@@ -613,29 +616,12 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     while (pow != 0){
         if (pow & 1){
             mul_matrix(result, temp, result);
-            ////debug:
-//            for (int i = 0; i < result->rows; i++) {
-//                printf("\n");
-//                for (int j = 0; j < result->cols; j++) {
-//                    printf("%lf,", result->data[(i * mat->cols) + j]);
-//                }
-//                printf("\n");
-//            }
+        }
+        pow = pow >> 1;
+        if (!pow){
+            break;
         }
         square(temp);
-
-        ////debug:
-//        printf("squared\n");
-//
-//        for (int i = 0; i < temp->rows; i++) {
-//            printf("\n");
-//            for (int j = 0; j < temp->cols; j++) {
-//                printf("%lf,", temp->data[(i * mat->cols) + j]);
-//            }
-//            printf("\n");
-//        }
-
-        pow = pow >> 1;
     }
 
     deallocate_matrix(temp);
