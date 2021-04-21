@@ -223,7 +223,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Store the result of subtracting mat2 from mat1 to `result`.
  * Return 0 upon success and a nonzero value upon failure.
  */
-int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
+int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
         return -1;
