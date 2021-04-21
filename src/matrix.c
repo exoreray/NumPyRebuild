@@ -192,33 +192,30 @@ void fill_matrix(matrix *mat, double val) {
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
-    int size = mat1->rows * mat1->cols;
-    int size8 = size / 8 * 8;
-    int size4 = size / 4 * 4;
-#pragma omp parallel for
-    for (int i = 0; i < size8; i+=8)
-    {
-        __m256d m1 = _mm256_loadu_pd(mat1->data + i);
-        __m256d m2 = _mm256_loadu_pd(mat1->data + i + 4);
-        __m256d n1 = _mm256_loadu_pd(mat2->data + i);
-        __m256d n2 = _mm256_loadu_pd(mat2->data + i + 4);
-        _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, n1));
-        _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m2, n2));
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
+        return -1;
     }
-#pragma omp parallel for
-
-    for (int i = size8; i < size4; i+=4)
+//    for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
+//        result->data[i] = mat1->data[i]+mat2->data[i];
+//    }
+//    return 0;
+    int length_floor8 = (mat1->rows)*(mat1->cols) / 8 * 8;
+#pragma omp parallel
     {
-        __m256d m1 = _mm256_loadu_pd(mat1->data + i);
-        __m256d n1 = _mm256_loadu_pd(mat2->data + i);
-        _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, n1));
+#pragma omp for
+        for(unsigned int i = 0; i < length_floor8; i += 8) {
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
+            __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
+            __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
+            __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
+            _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, m2));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m3, m4));
+        }
     }
-
-    for (int i = size4; i < size; i++)
-    {
-        *(result->data + i) = *(mat1->data + i) + *(mat2->data + i);
+//    #pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i] + mat2->data[i];
     }
-
     return 0;
 }
 
@@ -226,42 +223,32 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Store the result of subtracting mat2 from mat1 to `result`.
  * Return 0 upon success and a nonzero value upon failure.
  */
-int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
+int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
-//    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
-//        return -1;
-//    }
+    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols){
+        return -1;
+    }
 //    for (int i = 0; i < (mat1->rows)*(mat1->cols); i++) {
-//        result->data[i] = mat1->data[i]-mat2->data[i];
+//        result->data[i] = mat1->data[i]+mat2->data[i];
 //    }
 //    return 0;
-    int size = mat1->rows * mat1->cols;
-    int size8 = size / 8 * 8;
-    int size4 = size / 4 * 4;
-#pragma omp parallel for
-    for (int i = 0; i < size8; i+=8)
+    int length_floor8 = (mat1->rows)*(mat1->cols) / 8 * 8;
+#pragma omp parallel
     {
-        __m256d m1 = _mm256_loadu_pd(mat1->data + i);
-        __m256d m2 = _mm256_loadu_pd(mat1->data + i + 4);
-        __m256d n1 = _mm256_loadu_pd(mat2->data + i);
-        __m256d n2 = _mm256_loadu_pd(mat2->data + i + 4);
-        _mm256_storeu_pd(result->data + i, _mm256_sub_pd(m1, n1));
-        _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(m2, n2));
+#pragma omp for
+        for(unsigned int i = 0; i < length_floor8; i += 8) {
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
+            __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
+            __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
+            __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
+            _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, m2));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m3, m4));
+        }
     }
-#pragma omp parallel for
-
-    for (int i = size8; i < size4; i+=4)
-    {
-        __m256d m1 = _mm256_loadu_pd(mat1->data + i);
-        __m256d n1 = _mm256_loadu_pd(mat2->data + i);
-        _mm256_storeu_pd(result->data + i, _mm256_sub_pd(m1, n1));
+//    #pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = mat1->data[i] + mat2->data[i];
     }
-
-    for (int i = size4; i < size; i++)
-    {
-        *(result->data + i) = *(mat1->data + i) - *(mat2->data + i);
-    }
-
     return 0;
 }
 
@@ -628,8 +615,20 @@ int neg_matrix(matrix *result, matrix *mat) {
     if (mat == NULL){
         return -1;
     }
-    for (int i = 0; i < (mat->rows)*(mat->cols); i++) {
-        result->data[i] = -mat->data[i];
+    __m256d zero = _mm256_set1_pd(0);
+#pragma omp parallel
+    {
+#pragma omp for
+        for(unsigned int i = 0; i < length_floor8; i += 8) {
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
+            __m256d m2 =  _mm256_loadu_pd(mat1->data + i + 4);
+            _mm256_storeu_pd(result->data + i, _mm256_sub_pd(zero, m1));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(zero, m2));
+        }
+    }
+//    #pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+        result->data[i] = -mat1->data[i];
     }
     return 0;
 }
@@ -643,8 +642,19 @@ int abs_matrix(matrix *result, matrix *mat) {
     if (mat == NULL){
         return -1;
     }
-    for (int i = 0; i < (mat->rows)*(mat->cols); i++) {
-        if (mat->data[i]<0){
+#pragma omp parallel
+    {
+#pragma omp for
+        for(unsigned int i = 0; i < length_floor8; i += 8) {
+            __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
+            __m256d m2 =  _mm256_loadu_pd(mat1->data + i + 4);
+            _mm256_storeu_pd(result->data + i, _mm256_cmp_pd(_mm256_sub_pd(zero, m1), m1));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_cmp_pd(_mm256_sub_pd(zero, m2), m2));
+        }
+    }
+//    #pragma omp for
+    for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
+        if (mat->data[i] < 0){
             result->data[i] = -mat->data[i];
         }else{
             result->data[i] = mat->data[i];
