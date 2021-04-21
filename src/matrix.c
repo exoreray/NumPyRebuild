@@ -241,13 +241,13 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             __m256d m3 =  _mm256_loadu_pd(mat1->data + i + 4);
             __m256d m2 =  _mm256_loadu_pd(mat2->data + i);
             __m256d m4 =  _mm256_loadu_pd(mat2->data + i + 4);
-            _mm256_storeu_pd(result->data + i, _mm256_add_pd(m1, m2));
-            _mm256_storeu_pd(result->data + i + 4, _mm256_add_pd(m3, m4));
+            _mm256_storeu_pd(result->data + i, _mm256_sub_pd(m1, m2));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_sub_pd(m3, m4));
         }
     }
 //    #pragma omp for
     for (int i = (mat1->rows)*(mat1->cols) / 8 * 8; i < (mat1->rows)*(mat1->cols); i++) {
-        result->data[i] = mat1->data[i] + mat2->data[i];
+        result->data[i] = mat1->data[i] - mat2->data[i];
     }
     return 0;
 }
