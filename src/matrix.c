@@ -642,14 +642,15 @@ int abs_matrix(matrix *result, matrix *mat) {
     if (mat == NULL){
         return -1;
     }
+    __m256d zero = _mm256_set1_pd(0);
 #pragma omp parallel
     {
 #pragma omp for
         for(unsigned int i = 0; i < (mat->rows)*(mat->cols) / 8 * 8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat->data + i + 4);
-            _mm256_storeu_pd(result->data + i, _mm256_cmp_pd(_mm256_sub_pd(zero, m1), m1));
-            _mm256_storeu_pd(result->data + i + 4, _mm256_cmp_pd(_mm256_sub_pd(zero, m2), m2));
+            _mm256_storeu_pd(result->data + i, _mm256_max_pd(_mm256_sub_pd(zero, m1), m1));
+            _mm256_storeu_pd(result->data + i + 4, _mm256_max_pd(_mm256_sub_pd(zero, m2), m2));
         }
     }
 //    #pragma omp for
