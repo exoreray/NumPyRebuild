@@ -619,7 +619,7 @@ int neg_matrix(matrix *result, matrix *mat) {
 #pragma omp parallel
     {
 #pragma omp for
-        for(unsigned int i = 0; i < length_floor8; i += 8) {
+        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 8 * 8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat1->data + i + 4);
             _mm256_storeu_pd(result->data + i, _mm256_sub_pd(zero, m1));
@@ -645,7 +645,7 @@ int abs_matrix(matrix *result, matrix *mat) {
 #pragma omp parallel
     {
 #pragma omp for
-        for(unsigned int i = 0; i < length_floor8; i += 8) {
+        for(unsigned int i = 0; i < (mat1->rows)*(mat1->cols) / 8 * 8; i += 8) {
             __m256d m1 =  _mm256_loadu_pd(mat1->data + i);
             __m256d m2 =  _mm256_loadu_pd(mat1->data + i + 4);
             _mm256_storeu_pd(result->data + i, _mm256_cmp_pd(_mm256_sub_pd(zero, m1), m1));
