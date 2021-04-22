@@ -44,14 +44,4 @@ power:
 
 
 custom helper function for pow:
-  //// pow helper:
-  int square(struct matrix *mat){
-      struct matrix* temp;
-      allocate_matrix(&temp, mat->rows, mat->cols);
-      mul_matrix(temp, mat, mat);
-      free(mat->data);
-      mat->data = temp->data;
-  //    deallocate_matrix(temp);
-      temp = NULL;
-      return 0;
-  }
+ ![image](https://user-images.githubusercontent.com/46427258/115670234-0be6cc80-a2fe-11eb-86ff-6194c3dcdf5a.png)
