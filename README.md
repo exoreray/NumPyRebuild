@@ -5,23 +5,7 @@ Here is the link to the full reference manual: https://docs.python.org/3.6/c-api
 We define the Matrix61c struct in numc.h. It is of type PyObject (this means you can always cast Matrix61c to PyObject, but not vice versa), which according to the official documentation, “contains the information Python needs to treat a pointer to an object as an object”. Our Matrix61c has the matrix struct we defined in src/matrix.h.
 
 Then we define a struct PyTypeObject named Matrix61cType to specify the intended behaviors of our Python object Matrix61c. This struct will then be initialized to be our numc.Matrix objects.
-
-static PyTypeObject Matrix61cType = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "numc.Matrix",
-    .tp_basicsize = sizeof(Matrix61c),
-    .tp_dealloc = (destructor)Matrix61c_dealloc,
-    .tp_repr = (reprfunc)Matrix61c_repr,
-    .tp_as_number = &Matrix61c_as_number,
-    .tp_flags = Py_TPFLAGS_DEFAULT |
-        Py_TPFLAGS_BASETYPE,
-    .tp_doc = "numc.Matrix objects",
-    .tp_methods = Matrix61c_methods,
-    .tp_members = Matrix61c_members,
-    .tp_as_mapping = &Matrix61c_mapping,
-    .tp_init = (initproc)Matrix61c_init,
-    .tp_new = Matrix61c_new
-};
+![image](https://user-images.githubusercontent.com/46427258/115670131-ec4fa400-a2fd-11eb-9fa6-f46633784ba5.png)
 For example, .tp_dealloc tells Python which function to call to destroy a numc.Matrix object when its reference count becomes 0, and .tp_members tells Python what instance attributes numc.Matrix objects have. You can take a look at the official documentation if you are curious.
 https://docs.python.org/3.6/c-api/typeobj.html
 
