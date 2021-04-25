@@ -500,7 +500,7 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
     /* TODO: YOUR CODE HERE */
     /*  check Type */
 
-    if (!PyObject_TypeCheck(self, &Matrix61cType || !PyLong_Check(pow))) {
+    if (!PyObject_TypeCheck(self, &Matrix61cType) || !PyLong_Check(pow)) {
         PyErr_SetString(PyExc_TypeError, "  Type error!");
         return NULL;
     }
