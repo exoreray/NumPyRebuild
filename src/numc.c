@@ -543,12 +543,12 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
  */
 static PyNumberMethods Matrix61c_as_number = {
     /* TODO: YOUR CODE HERE */
-        .nc_add = (binaryfunc)Matrix61c_add,
-        .nc_sub = (binaryfunc)Matrix61c_sub,
-        .nc_mul = (binaryfunc)Matrix61c_multiply,
-        .nc_pow = (ternaryfunc)Matrix61c_pow,
-        .nc_neg= (unaryfunc)Matrix61c_neg,
-        .nc_abs= (unaryfunc)Matrix61c_abs,
+        .nb_add = (binaryfunc)Matrix61c_add,
+        .nb_subtract = (binaryfunc)Matrix61c_sub,
+        .nb_multiply = (binaryfunc)Matrix61c_multiply,
+        .nb_power = (ternaryfunc)Matrix61c_pow,
+        .nb_negative= (unaryfunc)Matrix61c_neg,
+        .nb_absolute= (unaryfunc)Matrix61c_abs,
 };
 
 
